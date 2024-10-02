@@ -1,15 +1,50 @@
+import models.Course;
+import models.English;
+import models.French;
+import models.Spanish;
+
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Scanner scanner = new Scanner(System.in);
+        String course;
+        Course AvailableCourse = new Course();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        // Boucle infinie pour demander l'entrée
+        while (true) {
+            System.out.print("Which courses do you want to learn?, type exit to quit     ");
+            course = scanner.nextLine();
+
+            // Vérifier si l'utilisateur souhaite quitter
+            if (course.equalsIgnoreCase("exit")) {
+                System.out.println("program finished!");
+                break;
+            }
+            if (!AvailableCourse.getMyquestions().contains(course)){
+                System.out.println("This course is not available!");
+
+            }
+            else {
+                if (course.equals("ENGLISH")){
+                    English english = new English();
+                } else if (course.equals("SPANISH")) {
+                    Spanish spanish = new Spanish();
+                }
+                else{
+                    French french = new French();
+                }
+            }
+
+
+
         }
+
+        scanner.close();
+
     }
 }
