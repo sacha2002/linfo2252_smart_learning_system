@@ -1,10 +1,12 @@
-import models.Course;
-import models.English;
-import models.French;
-import models.Spanish;
+import models.Exercises.Exercise;
+import models.Exercises.ListeningExercise;
+import models.Rank;
+import models.courses.Course;
+import models.courses.English;
+import models.courses.French;
+import models.courses.Spanish;
 
-import java.io.InputStreamReader;
-import java.util.Scanner;
+import java.util.*;
 
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -13,7 +15,24 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String course;
-        Course AvailableCourse = new Course();
+
+        Map<String,Course> available_courses =  new HashMap<>(); // this logic should be in the controller i think
+
+        List<Exercise> spanishGrammarExercises = List.of(
+                new Exercise("¿Cuál es la conjugación correcta del verbo 'ser' en presente?", Rank.GOLD),
+                new Exercise("¿Cuándo se utiliza el subjuntivo en español?",  Rank.GOLD),
+                new Exercise("Corrige la oración: 'El niño jugaba mientras sus padres cocinaban'.",  Rank.GOLD)
+        );
+
+        List<Exercise> frenchListeningExercises = List.of(
+                new ListeningExercise("Écoute et répète la phrase suivante: 'Bonjour, comment ça va?'", Rank.GOLD, "greeting.mp3"),
+                new ListeningExercise("Écoute le dialogue et identifie le nombre de personnes présentes.", Rank.GOLD, "conversation.mp3"),
+                new ListeningExercise("Écoute ce discours et réponds aux questions sur le contenu.", Rank.GOLD, "speech.mp3")
+        );
+
+
+        available_courses.putIfAbsent("spanish",new Spanish(1200,spanishGrammarExercises));
+        available_courses.putIfAbsent("french",new French(1200,frenchListeningExercises));
 
         // Boucle infinie pour demander l'entrée
         while (true) {
@@ -24,19 +43,18 @@ public class Main {
             if (course.equalsIgnoreCase("exit")) {
                 System.out.println("program finished!");
                 break;
-            }
-            if (!AvailableCourse.getMyquestions().contains(course)){
-                System.out.println("This course is not available!");
+            } else {
 
-            }
-            else {
-                if (course.equals("ENGLISH")){
-                    English english = new English();
-                } else if (course.equals("SPANISH")) {
-                    Spanish spanish = new Spanish();
-                }
-                else{
-                    French french = new French();
+               Course selectedCourse = available_courses.get(course);
+
+                if (selectedCourse != null) {
+                    // Course found, print exercises
+                    System.out.println("Exercises for " + selectedCourse.getName() + ":");
+                    for (Exercise exercise : selectedCourse.getExercises()) {
+                        System.out.println("- " + exercise.getText());
+                    }
+                } else {
+                    System.out.println("Sorry, that course is not available.");
                 }
             }
 
