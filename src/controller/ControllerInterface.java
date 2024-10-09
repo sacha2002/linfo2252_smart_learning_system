@@ -1,3 +1,5 @@
+package controller;
+
 public interface ControllerInterface {
     /** The "activate" method is responsible for (de)activating features.
      A feature *must* be mentioned in the feature model (which can be updated), and only features in the feature model can be (de)activated.

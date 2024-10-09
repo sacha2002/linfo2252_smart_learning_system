@@ -5,6 +5,7 @@ import models.Rank;
 public class Exercise {
     protected String text;
     protected Rank rank;
+    protected String answer; //TODO
 
     public Exercise(String text, Rank rank) {
         this.text = text;
