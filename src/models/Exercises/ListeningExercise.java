@@ -5,8 +5,8 @@ import models.Rank;
 public class ListeningExercise extends Exercise {
     private String audioFilePath;
 
-    public ListeningExercise(String text, Rank rank, String audioFilePath) {
-        super(text, rank);
+    public ListeningExercise(String text, Rank rank, String answer, String hint, String audioFilePath) {
+        super(text, rank, answer, hint);
         this.audioFilePath = audioFilePath;
     }
 

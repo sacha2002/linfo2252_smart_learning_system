@@ -3,8 +3,8 @@ package models.Exercises;
 import models.Rank;
 
 public class GrammarExercise extends Exercise {
-    public GrammarExercise(String text, Rank rank) {
-        super(text, rank);
+    public GrammarExercise(String text, Rank rank,String answer, String hint) {
+        super(text, rank,answer,hint);
     }
 
     @Override

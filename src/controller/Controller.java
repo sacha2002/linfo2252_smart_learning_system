@@ -1,38 +1,26 @@
 package controller;
 
 import models.Exercises.Exercise;
-import models.Exercises.ListeningExercise;
-import models.Rank;
+import models.Exercises.ExerciseData;
 import models.courses.Course;
 import models.courses.French;
 import models.courses.Spanish;
 import views.MainView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Controller implements ControllerInterface{
 
     Map<String, Course> available_courses =  new HashMap<>();
-    MainView mv;
+    Optional<MainView> mv = Optional.empty();
 
     public Controller(){
-        List<Exercise> spanishGrammarExercises = List.of(
-                new Exercise("¿Cuál es la conjugación correcta del verbo 'ser' en presente?", Rank.GOLD),
-                new Exercise("¿Cuándo se utiliza el subjuntivo en español?",  Rank.GOLD),
-                new Exercise("Corrige la oración: 'El niño jugaba mientras sus padres cocinaban'.",  Rank.GOLD)
-        );
 
-        List<Exercise> frenchListeningExercises = List.of(
-                new ListeningExercise("Écoute et répète la phrase suivante: 'Bonjour, comment ça va?'", Rank.GOLD, "greeting.mp3"),
-                new ListeningExercise("Écoute le dialogue et identifie le nombre de personnes présentes.", Rank.GOLD, "conversation.mp3"),
-                new ListeningExercise("Écoute ce discours et réponds aux questions sur le contenu.", Rank.GOLD, "speech.mp3")
-        );
-
-        available_courses.putIfAbsent("spanish",new Spanish(1200,spanishGrammarExercises));
-        available_courses.putIfAbsent("french",new French(1200,frenchListeningExercises));
+        available_courses.putIfAbsent("spanish",new Spanish(1200,ExerciseData.getSpanishGoldExercises()));
+        available_courses.putIfAbsent("french",new French(1200,ExerciseData.getFrenchGoldExercises()));
     }
 
     @Override
@@ -42,7 +30,7 @@ public class Controller implements ControllerInterface{
 
     @Override
     public boolean enableUIView() {
-       mv = new MainView();
+       mv =  Optional.of(new MainView());
         return false;
     }
 
@@ -79,10 +67,10 @@ public class Controller implements ControllerInterface{
 
                 if (selectedCourse != null) {
                     // Course found, print exercises
-                    controller.mv.clearLabels();
+                    controller.mv.ifPresent(MainView::clearLabels);
                     System.out.println("Exercises for " + selectedCourse.getName() + ":");
                     for (Exercise exercise : selectedCourse.getExercises()) {
-                        controller.mv.displayExercise(exercise.getText());
+                        controller.mv.ifPresent(mv -> mv.displayExercise(exercise.getText()));
                         System.out.println("- " + exercise.getText());
                     }
                 } else {
