@@ -7,10 +7,7 @@ import models.courses.French;
 import models.courses.Spanish;
 import views.MainView;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Controller implements ControllerInterface{
 
@@ -50,7 +47,7 @@ public class Controller implements ControllerInterface{
         Controller controller = new Controller();
         // Boucle infinie pour demander l'entrée
         while (true) {
-            System.out.print("Which courses do you want to learn?, type exit to quit     ");
+            System.out.print("Which courses do you want to learn?, type exit to quit ");
             course = scanner.nextLine();
 
             // Vérifier si l'utilisateur souhaite quitter
@@ -72,6 +69,17 @@ public class Controller implements ControllerInterface{
                     for (Exercise exercise : selectedCourse.getExercises()) {
                         controller.mv.ifPresent(mv -> mv.displayExercise(exercise.getText()));
                         System.out.println("- " + exercise.getText());
+                        System.out.print("please write next to continue : ");
+                        String input = scanner.nextLine();
+
+
+                        while (!input.equalsIgnoreCase("next")) {
+                            input = scanner.nextLine();
+                        }
+
+
+
+
                     }
                 } else {
                     System.out.println("Sorry, that course is not available.");
