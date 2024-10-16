@@ -2,6 +2,7 @@ package controller;
 
 import models.Exercises.Exercise;
 import models.Exercises.ExerciseData;
+import models.Logger;
 import models.courses.Course;
 import models.courses.French;
 import models.courses.Spanish;
@@ -28,17 +29,20 @@ public class Controller implements ControllerInterface{
     @Override
     public boolean enableUIView() {
        mv =  Optional.of(new MainView());
-        return false;
+        return true;
     }
 
     @Override
     public boolean disableUIView() {
-        return false;
+        mv.ifPresent(MainView::closeWindow);
+        mv = Optional.empty();
+        return true;
     }
 
     @Override
     public String[] getStateAsLog() {
-        return new String[0];
+        Logger logs = Logger.getInstance();
+        return logs.getHistory().toArray(new String[0]);
     }
 
     public static void main(String[] args) {
@@ -53,6 +57,7 @@ public class Controller implements ControllerInterface{
             // Vérifier si l'utilisateur souhaite quitter
             if (course.equalsIgnoreCase("exit")) {
                 System.out.println("program finished!");
+                controller.disableUIView();
                 break;
             } else
             if (course.equalsIgnoreCase("view")) {
@@ -87,7 +92,6 @@ public class Controller implements ControllerInterface{
             }
 
         }
-
         scanner.close();
 
     }

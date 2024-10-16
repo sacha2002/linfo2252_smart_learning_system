@@ -1,8 +1,12 @@
 package models.Exercises;
 
+import models.Logger;
 import models.Rank;
 
 public class Exercise {
+
+    protected final Logger logger = Logger.getInstance();
+
     protected String text;
     protected Rank rank;
     protected String answer;
@@ -16,6 +20,7 @@ public class Exercise {
     }
 
     public String getHint() {
+        logger.logChange("used hint!");
         return hint;
     }
 
@@ -32,7 +37,10 @@ public class Exercise {
     }
 
     public boolean checkUserAnswer(String userAnswer) {
-        return answer.equals(userAnswer);
+        boolean correct = answer.equals(userAnswer);
+
+        logger.logChange(correct? "correct answer!" : "wrong answer!");
+        return correct;
     }
 
     public void ask(){

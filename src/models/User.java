@@ -9,7 +9,7 @@ import java.util.List;
 
 public class User {
 
-    private final Logger logger = new Logger();
+    private final Logger logger = Logger.getInstance();
 
      private final List<Course> coursesList = new ArrayList<>();
      private final List<User> friendsList = new ArrayList<>();
@@ -71,7 +71,7 @@ public class User {
 
         if (energyToRecharge > 0) {
             currentEnergy = Math.min(MAX_ENERGY, currentEnergy + energyToRecharge);
-            lastRechargeTime = now; // Update last recharge time to now
+            lastRechargeTime = now;
             logger.logChange("user: " + username +" has recharged his energy");
         }
     }
@@ -80,9 +80,9 @@ public class User {
     public boolean practice() {
         rechargeEnergy();
         if (currentEnergy > 0) {
-            currentEnergy--; // Consume energy
+            currentEnergy--;
             logger.logChange(username + " practiced! Current energy: " + currentEnergy);
-            return true; // Practice successful
+            return true;
         } else {
             logger.logChange(username + " does not have enough energy to practice.");
             return false; // Not enough energy
@@ -103,6 +103,7 @@ public class User {
 
     public void setStreak(int streak) {
         this.streak = streak;
+        logger.logChange(username + "has now a streak of " + streak);
     }
 
     public void setEnergy(int energy) {

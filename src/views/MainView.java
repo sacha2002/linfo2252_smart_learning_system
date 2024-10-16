@@ -53,6 +53,10 @@ public class MainView {
         }
     }
 
+    public void closeWindow() {
+        frame.dispose();
+    }
+
 
 
 }
