@@ -41,8 +41,8 @@ public class Controller implements ControllerInterface{
 
     @Override
     public String[] getStateAsLog() {
-        Logger logs = Logger.getInstance();
-        return logs.getHistory().toArray(new String[0]);
+        List<String> currentStateLogs = Logger.getInstance().getAllCurrentStates();
+        return currentStateLogs.toArray(new String[0]);
     }
 
     public static void main(String[] args) {

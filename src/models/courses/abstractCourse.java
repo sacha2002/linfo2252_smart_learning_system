@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class abstractCourse implements Course{
+    private static int idCounter = 0;
+
+
     private final String name;
     private List<Exercise> exercises;
     private int courseRank;
+    private int id;
 
     private final Logger logger = Logger.getInstance();
 
@@ -17,8 +21,10 @@ abstract class abstractCourse implements Course{
         this.name = name;
         this.courseRank = courseRank;
         this.exercises = exercises;
+        this.id=idCounter;
+        idCounter++;
 
-        logger.logChange(name + " course created and exercises have been loaded!");
+        logger.logChange(name + " course created and exercises have been loaded!",name+id,this.toString());
     }
 
 
@@ -32,12 +38,28 @@ abstract class abstractCourse implements Course{
         return courseRank;
     }
 
+    @Override
+    public int getId() {
+        return id;
+    }
+
     public void setCourseRank(int courseRank) {
         this.courseRank = courseRank;
+        logger.logChange(name + " course rank have been changed",name+id,this.toString());
     }
 
     @Override
     public List<Exercise> getExercises() {
         return exercises;
+    }
+
+    @Override
+    public String toString() {
+        return "abstractCourse{" + "id="+ id +
+                "name='" + name + '\'' +
+                ", exercises=" + exercises +
+                ", courseRank=" + courseRank +
+                ", logger=" + logger +
+                '}';
     }
 }

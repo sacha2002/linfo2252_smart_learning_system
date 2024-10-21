@@ -28,7 +28,7 @@ public class User {
         this.streak = streak;
         this.isPremium = isPremium;
         this.currentEnergy = currentEnergy;
-        logger.logChange("user: " + username +" has been created");
+        logger.logChange("user: " + username +" has been created", username,this.toString());
     }
 
     public List<Course> getCoursesList() {
@@ -37,12 +37,12 @@ public class User {
 
     public void enrollFromCourse(Course course) {
         coursesList.add(course);
-        logger.logChange("user: " + username +" enrolled in " + course.getName());
+        logger.logChange("user: " + username +" enrolled in " + course.getName(), username,this.toString());
     }
 
     public void deEnrollFromCourse(Course course) {
         coursesList.remove(course);
-        logger.logChange("user: " + username +" Unenrolled in " + course.getName());
+        logger.logChange("user: " + username +" Unenrolled in " + course.getName(), username,this.toString());
     }
 
     public List<User> getFriendsList() {
@@ -52,13 +52,13 @@ public class User {
     public void addFriend(User user) {
         friendsList.add(user);
         user.addFriend(this); //mutually adding
-        logger.logChange(username +" and  " + user.getUsername() + " are now friends ");
+        logger.logChange(username +" and  " + user.getUsername() + " are now friends ", username,this.toString());
     }
 
     public void deleteFriend(User user){
         friendsList.remove(user);
         user.deleteFriend(this);//mutually delete
-        logger.logChange(username +" and  " + user.getUsername() + " are no longer friends ");
+        logger.logChange(username +" and  " + user.getUsername() + " are no longer friends ", username,this.toString());
     }
 
     //Recharge energy based on time passed
@@ -72,7 +72,7 @@ public class User {
         if (energyToRecharge > 0) {
             currentEnergy = Math.min(MAX_ENERGY, currentEnergy + energyToRecharge);
             lastRechargeTime = now;
-            logger.logChange("user: " + username +" has recharged his energy");
+            logger.logChange("user: " + username +" has recharged his energy", username,this.toString());
         }
     }
 
@@ -81,10 +81,10 @@ public class User {
         rechargeEnergy();
         if (currentEnergy > 0) {
             currentEnergy--;
-            logger.logChange(username + " practiced! Current energy: " + currentEnergy);
+            logger.logChange(username + " practiced! Current energy: " + currentEnergy, username,this.toString());
             return true;
         } else {
-            logger.logChange(username + " does not have enough energy to practice.");
+            logger.logChange(username + " does not have enough energy to practice.", username,this.toString());
             return false; // Not enough energy
         }
     }
@@ -103,7 +103,7 @@ public class User {
 
     public void setStreak(int streak) {
         this.streak = streak;
-        logger.logChange(username + "has now a streak of " + streak);
+        logger.logChange(username + "has now a streak of " + streak, username,this.toString());
     }
 
     public void setEnergy(int energy) {
@@ -118,6 +118,18 @@ public class User {
         isPremium = premium;
 
         String premiumMessage = isPremium? "is now premium" : "is no longer premium";
-        logger.logChange(username + premiumMessage);
+        logger.logChange(username + premiumMessage, username,this.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "currentEnergy=" + currentEnergy +
+                ", isPremium=" + isPremium +
+                ", streak=" + streak +
+                ", username='" + username + '\'' +
+                ", friendsList=" + friendsList +
+                ", coursesList=" + coursesList +
+                '}';
     }
 }
