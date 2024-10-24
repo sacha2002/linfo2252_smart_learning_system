@@ -3,6 +3,7 @@ package controller;
 import models.Exercises.Exercise;
 import models.Exercises.ExerciseData;
 import models.Logger;
+import models.Model;
 import models.courses.Course;
 import models.courses.French;
 import models.courses.Spanish;
@@ -14,6 +15,8 @@ public class Controller implements ControllerInterface{
 
     Map<String, Course> available_courses =  new HashMap<>();
     Optional<MainView> mv = Optional.empty();
+    Model model = new Model("OEM",0,false,30);
+
 
     public Controller(){
 
@@ -23,7 +26,11 @@ public class Controller implements ControllerInterface{
 
     @Override
     public int activate(String[] deactivations, String[] activations) {
+
+
         return 0;
+        //energy system if premium or not
+        //courses if energy is 0
     }
 
     @Override

@@ -3,30 +3,31 @@ package models;
 import models.Energy.EnergyStrategy;
 import models.Energy.NormalUserEnergy;
 import models.Energy.PremiumUserEnergy;
-import models.Exercises.Exercise;
 import models.courses.Course;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class Model {
 
     private final Logger logger = Logger.getInstance();
 
      private final List<Course> coursesList = new ArrayList<>();
      private String username;
+
      private int streak;
-     private boolean isPremium;
+     private LocalDate lastPracticeDate;
 
-
+    private boolean isPremium;
     private int currentEnergy;
     private LocalDateTime lastRechargeTime;
     private static final Duration rechargeInterval = Duration.ofMinutes(5);
     private EnergyStrategy energyStrategy;
 
-    public User(String username, int streak, boolean isPremium, int currentEnergy) {
+    public Model(String username, int streak, boolean isPremium, int currentEnergy) {
         this.username = username;
         this.streak = streak;
         this.isPremium = isPremium;
@@ -35,8 +36,11 @@ public class User {
         logger.logChange("user: " + username + " has been created", username, this.toString());
     }
 
+    //if he cant practice, the courses arent available
     public List<Course> getCoursesList() {
-        return coursesList;
+        if(energyStrategy.canPractice(currentEnergy))
+            return coursesList;
+        return new ArrayList<>();
     }
 
     public void enrollToCourse(Course course) {
@@ -81,10 +85,19 @@ public class User {
         this.username = username;
     }
 
-    public void setStreak(int streak) {
-        this.streak = streak;
-        logger.logChange(username + "has now a streak of " + streak, username,this.toString());
+    private void updateStreak() {
+        LocalDate today = LocalDate.now();
+
+        if (lastPracticeDate.equals(today.minusDays(1))) {
+            streak++; // Extend the streak
+        } else if (!lastPracticeDate.equals(today)) {
+            streak = 0;
+        }
+
+        lastPracticeDate = today; // Update last practice date
+        logger.logChange(username + " streak updated to: " + streak, username, this.toString());
     }
+
 
 
     public boolean isPremium() {
