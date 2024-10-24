@@ -12,7 +12,7 @@ abstract class abstractCourse implements Course{
     private final String name;
     private List<Exercise> exercises;
     private int courseRank;
-    private int id;
+    private static int id;
 
     private final Logger logger = Logger.getInstance();
 
@@ -45,6 +45,17 @@ abstract class abstractCourse implements Course{
     public void setCourseRank(int courseRank) {
         this.courseRank = courseRank;
         logger.logChange(name + " course rank have been changed",name+id,this.toString());
+    }
+
+    @Override
+    public boolean practice( Exercise exercise ,String userAnswer){
+       boolean correct = exercise.checkUserAnswer(userAnswer);
+       if(correct){
+           courseRank++;
+           logger.logChange(name + " course rank has ",name+id,this.toString());
+           return true;
+       }
+       return false;
     }
 
     @Override
