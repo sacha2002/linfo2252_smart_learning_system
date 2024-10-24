@@ -1,5 +1,9 @@
 package models;
 
+import models.Energy.EnergyStrategy;
+import models.Energy.NormalUserEnergy;
+import models.Energy.PremiumUserEnergy;
+import models.Exercises.Exercise;
 import models.courses.Course;
 
 import java.time.Duration;
@@ -12,80 +16,56 @@ public class User {
     private final Logger logger = Logger.getInstance();
 
      private final List<Course> coursesList = new ArrayList<>();
-     private final List<User> friendsList = new ArrayList<>();
      private String username;
      private int streak;
      private boolean isPremium;
 
 
-    private static final int MAX_ENERGY = 10;
     private int currentEnergy;
     private LocalDateTime lastRechargeTime;
     private static final Duration rechargeInterval = Duration.ofMinutes(5);
+    private EnergyStrategy energyStrategy;
 
     public User(String username, int streak, boolean isPremium, int currentEnergy) {
         this.username = username;
         this.streak = streak;
         this.isPremium = isPremium;
         this.currentEnergy = currentEnergy;
-        logger.logChange("user: " + username +" has been created", username,this.toString());
+        this.energyStrategy = isPremium ? new PremiumUserEnergy() : new NormalUserEnergy();
+        logger.logChange("user: " + username + " has been created", username, this.toString());
     }
 
     public List<Course> getCoursesList() {
         return coursesList;
     }
 
-    public void enrollFromCourse(Course course) {
+    public void enrollToCourse(Course course) {
         coursesList.add(course);
         logger.logChange("user: " + username +" enrolled in " + course.getName(), username,this.toString());
     }
 
-    public void deEnrollFromCourse(Course course) {
+    public void deEnrollToCourse(Course course) {
         coursesList.remove(course);
         logger.logChange("user: " + username +" Unenrolled in " + course.getName(), username,this.toString());
     }
 
-    public List<User> getFriendsList() {
-        return friendsList;
-    }
-
-    public void addFriend(User user) {
-        friendsList.add(user);
-        user.addFriend(this); //mutually adding
-        logger.logChange(username +" and  " + user.getUsername() + " are now friends ", username,this.toString());
-    }
-
-    public void deleteFriend(User user){
-        friendsList.remove(user);
-        user.deleteFriend(this);//mutually delete
-        logger.logChange(username +" and  " + user.getUsername() + " are no longer friends ", username,this.toString());
-    }
 
     //Recharge energy based on time passed
     private void rechargeEnergy() {
-        LocalDateTime now = LocalDateTime.now();
-        long minutesElapsed = Duration.between(lastRechargeTime, now).toMinutes();
-
-
-        int energyToRecharge = (int) (minutesElapsed / rechargeInterval.toMinutes());
-
-        if (energyToRecharge > 0) {
-            currentEnergy = Math.min(MAX_ENERGY, currentEnergy + energyToRecharge);
-            lastRechargeTime = now;
-            logger.logChange("user: " + username +" has recharged his energy", username,this.toString());
-        }
+        currentEnergy = energyStrategy.rechargeEnergy(currentEnergy, lastRechargeTime, rechargeInterval);
+        lastRechargeTime = LocalDateTime.now();
+        logger.logChange("user: " + username + " has recharged their energy", username, this.toString());
     }
 
-    //delete energy and check if can practice todo just check for energy
     public boolean practice() {
         rechargeEnergy();
-        if (currentEnergy > 0) {
+        if (energyStrategy.canPractice(currentEnergy)) {
             currentEnergy--;
-            logger.logChange(username + " practiced! Current energy: " + currentEnergy, username,this.toString());
+            logger.logChange(username + " practiced! Current energy: " + currentEnergy, username, this.toString());
             return true;
         } else {
-            logger.logChange(username + " does not have enough energy to practice.", username,this.toString());
-            return false; // Not enough energy
+            logger.logChange(username + " does not have enough energy to practice.", username, this.toString());
+            return false;
         }
     }
 
@@ -106,9 +86,6 @@ public class User {
         logger.logChange(username + "has now a streak of " + streak, username,this.toString());
     }
 
-    public void setEnergy(int energy) {
-        this.currentEnergy = Math.min(MAX_ENERGY, Math.max(0, energy)); // just for testing in future
-    }
 
     public boolean isPremium() {
         return isPremium;
@@ -116,9 +93,9 @@ public class User {
 
     public void setPremium(boolean premium) {
         isPremium = premium;
-
-        String premiumMessage = isPremium? "is now premium" : "is no longer premium";
-        logger.logChange(username + premiumMessage, username,this.toString());
+        energyStrategy = isPremium ? new PremiumUserEnergy() : new NormalUserEnergy();
+        String premiumMessage = isPremium ? "is now premium" : "is no longer premium";
+        logger.logChange(username + " " + premiumMessage, username, this.toString());
     }
 
     @Override
@@ -128,7 +105,6 @@ public class User {
                 ", isPremium=" + isPremium +
                 ", streak=" + streak +
                 ", username='" + username + '\'' +
-                ", friendsList=" + friendsList +
                 ", coursesList=" + coursesList +
                 '}';
     }

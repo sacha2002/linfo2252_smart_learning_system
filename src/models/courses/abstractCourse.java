@@ -3,7 +3,6 @@ package models.courses;
 import models.Exercises.Exercise;
 import models.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 abstract class abstractCourse implements Course{
