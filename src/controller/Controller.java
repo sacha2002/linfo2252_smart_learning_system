@@ -12,17 +12,16 @@ import views.MainView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller implements ControllerInterface{
 
+    private int exercice_id;
+    private String real_answer;
 
     public class clickButton implements ActionListener {
         static String course = "";
 
         public void actionPerformed(ActionEvent e) {
-
-
             mv.ifPresent(mv -> {
 
                 if (e.getSource() == mv.getSpanishButton()) {
@@ -34,12 +33,30 @@ public class Controller implements ControllerInterface{
                 }
                 Course selectedCourse = available_courses.get(course);
                 for (Exercise exercise : selectedCourse.getExercises()){
+                    exercice_id = exercise.getId();
+                    real_answer = exercise.getAnswer();
                     mv.displayExercise(exercise.getText());
-
-
-
             };
         });
+        }
+    }
+
+    public class enterTextfield implements ActionListener {
+
+        static String answer = "";
+        public void actionPerformed(ActionEvent e){
+            System.out.println("okok");
+            mv.ifPresent(mv -> {
+                answer = mv.getUserAnswer();
+                if (answer.equals(real_answer)){
+                    System.out.println("bonne réponse");
+                }
+                else {
+                    System.out.println("Reessayez");
+                }
+
+
+            });
         }
     }
 
@@ -68,7 +85,8 @@ public class Controller implements ControllerInterface{
     @Override
     public boolean enableUIView() {
        mv =  Optional.of(new MainView());
-       mv.get().addButtonListeners(new clickButton());
+       mv.get().addButtonsLister(new clickButton());
+       mv.get().addTextfieldListener(new enterTextfield());
        return true;
     }
 

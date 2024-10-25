@@ -10,17 +10,14 @@ import java.util.List;
 import javax.swing.*;
 
 import models.Exercises.Exercise;
-import models.Exercises.ExerciseData;
-import models.courses.Course;
-import models.courses.French;
-import models.courses.Spanish;
 
 public class MainView {
 
     private JFrame frame;
     private JPanel centerPanel;
-    private BorderLayout borderLayout1;
+    private JTextField answerField;
     private JLabel premiumLabel;
+    private JLabel scoreLabel;
     private JButton premiumButton;
     private JButton spanishButton;
     private JButton frenchButton;
@@ -41,7 +38,10 @@ public class MainView {
         // Créer le topPanel pour le titre et le premiumLabel
         JPanel topPanel = new JPanel(new BorderLayout());
         premiumLabel = new JLabel("Free Mode", JLabel.LEFT);
+        scoreLabel = new JLabel("Score : ",JLabel.RIGHT);
+
         topPanel.add(premiumLabel, BorderLayout.WEST); // Placer premiumLabel à gauche
+        topPanel.add(scoreLabel,BorderLayout.EAST);
 
         // Créer le panneau central pour ajouter des composants dynamiques
         centerPanel = new JPanel();
@@ -52,10 +52,7 @@ public class MainView {
         spanishButton = new JButton("Spanish");
         frenchButton = new JButton("French");
         englishButton = new JButton("English");
-
-        spanishButton.addActionListener(e -> loadCourse("spanish"));
-        frenchButton.addActionListener(e -> loadCourse("french"));
-        englishButton.addActionListener(e -> loadCourse("english"));
+        answerField = new JTextField("",20);
 
         buttonPanel.add(spanishButton);
         buttonPanel.add(frenchButton);
@@ -92,14 +89,14 @@ public class MainView {
         frame.setFocusable(true);
     }
 
-    private void loadCourse(String courseName) {
-
-    }
-
-    public void addButtonListeners(ActionListener listener) {
+    public void addButtonsLister(ActionListener listener) {
         spanishButton.addActionListener(listener);
         frenchButton.addActionListener(listener);
         englishButton.addActionListener(listener);
+    }
+
+    public void addTextfieldListener(ActionListener listener){
+        answerField.addActionListener(listener);
     }
 
     public JButton getEnglishButton(){
@@ -110,6 +107,9 @@ public class MainView {
     }
     public JButton getSpanishButton(){
         return spanishButton;
+    }
+    public String getUserAnswer(){
+        return answerField.getText();
     }
 
     private void showPreviousExercise() {
@@ -129,15 +129,20 @@ public class MainView {
     public void displayExercise(String question) {
         this.clearLabels();
         JLabel label1 = new JLabel(question, JLabel.CENTER);
-        centerPanel.setLayout(new GridBagLayout()); // Utiliser GridBagLayout pour centrer le label
+        centerPanel.setLayout(new BorderLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER; // Centrer le label
-        gbc.insets = new Insets(10, 10, 10, 10); // Optionnel : ajouter des marges
 
-        centerPanel.add(label1, gbc); // Ajouter le label avec les contraintes spécifiées
+        centerPanel.add(label1, BorderLayout.CENTER);
+        // Ajouter le champ d'entrée pour la réponse
+
+
+
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        answerField.setText("answer");
+        inputPanel.add(answerField);
+
+        centerPanel.add(inputPanel, BorderLayout.SOUTH);
+
         exercises.add(label1);
 
         frame.repaint();
