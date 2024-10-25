@@ -10,4 +10,5 @@ public interface Course {
     List<Exercise> getExercises();
     String toString();
     int getId();
+    boolean practice( Exercise exercise,String userAnswer);
 }
