@@ -3,7 +3,12 @@ package models;
 import models.Energy.EnergyStrategy;
 import models.Energy.NormalUserEnergy;
 import models.Energy.PremiumUserEnergy;
+import models.Exercises.Exercise;
+import models.Exercises.ExerciseData;
 import models.courses.Course;
+import models.courses.English;
+import models.courses.French;
+import models.courses.Spanish;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -33,6 +38,11 @@ public class Model {
         this.isPremium = isPremium;
         this.currentEnergy = currentEnergy;
         this.energyStrategy = isPremium ? new PremiumUserEnergy() : new NormalUserEnergy();
+        //all rank in silver just for demo
+        coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
+        coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
+        coursesList.add(new English(650, ExerciseData.getEnglishSilverExercises()));
+
         logger.logChange("user: " + username + " has been created", username, this.toString());
     }
 
@@ -41,16 +51,6 @@ public class Model {
         if(energyStrategy.canPractice(currentEnergy))
             return coursesList;
         return new ArrayList<>();
-    }
-
-    public void enrollToCourse(Course course) {
-        coursesList.add(course);
-        logger.logChange("user: " + username +" enrolled in " + course.getName(), username,this.toString());
-    }
-
-    public void deEnrollToCourse(Course course) {
-        coursesList.remove(course);
-        logger.logChange("user: " + username +" Unenrolled in " + course.getName(), username,this.toString());
     }
 
 
@@ -96,6 +96,15 @@ public class Model {
 
         lastPracticeDate = today; // Update last practice date
         logger.logChange(username + " streak updated to: " + streak, username, this.toString());
+    }
+
+    public Course getCourse(String courseName){
+        for (Course c : coursesList) {
+            if(courseName.equals(c.getName())){
+                return c;
+            }
+        }
+        return null;
     }
 
 

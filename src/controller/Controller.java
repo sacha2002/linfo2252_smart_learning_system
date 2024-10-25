@@ -1,12 +1,9 @@
 package controller;
 
 import models.Exercises.Exercise;
-import models.Exercises.ExerciseData;
 import models.Logger;
 import models.Model;
 import models.courses.Course;
-import models.courses.French;
-import models.courses.Spanish;
 import views.MainView;
 
 import java.awt.event.ActionEvent;
@@ -31,7 +28,7 @@ public class Controller implements ControllerInterface{
                 } else if (e.getSource() == mv.getEnglishButton()) {
                     course = "english";
                 }
-                Course selectedCourse = available_courses.get(course);
+                Course selectedCourse = model.getCourse(course);
                 for (Exercise exercise : selectedCourse.getExercises()){
                     exercice_id = exercise.getId();
                     real_answer = exercise.getAnswer();
@@ -60,22 +57,39 @@ public class Controller implements ControllerInterface{
         }
     }
 
-    Map<String, Course> available_courses =  new HashMap<>();
+    List<String> available_courses =  new ArrayList<>();
     Optional<MainView> mv = Optional.empty();
     Model model = new Model("OEM",0,false,30);
 
 
 
-
     public Controller(){
-
-        available_courses.putIfAbsent("spanish",new Spanish(1200,ExerciseData.getSpanishGoldExercises()));
-        available_courses.putIfAbsent("french",new French(1200,ExerciseData.getFrenchGoldExercises()));
+        available_courses.add("english");
+        available_courses.add("spanish");
+        available_courses.add("french");
     }
 
     @Override
     public int activate(String[] deactivations, String[] activations) {
+        for(String feat : activations){
+            if(feat.equals("courses")){
+                available_courses.add("english");
+                available_courses.add("spanish");
+                available_courses.add("french");
+            } else if( feat.equals("premium")){
+                model.setPremium(true);
+            }
+        }
 
+        for(String feat : deactivations){
+            if(feat.equals("courses")){
+                available_courses.remove("english");
+                available_courses.remove("spanish");
+                available_courses.remove("french");
+            } else if( feat.equals("premium")){
+                model.setPremium(false);
+            }
+        }
 
         return 0;
         //energy system if premium or not
@@ -125,9 +139,9 @@ public class Controller implements ControllerInterface{
 
             } else {
 
-                Course selectedCourse = controller.available_courses.get(course);
+                Course selectedCourse = controller.model.getCourse(course);
 
-                if (selectedCourse != null) {
+                if (selectedCourse != null && controller.available_courses.contains(course)) {
                     // Course found, print exercises
                     controller.mv.ifPresent(MainView::clearLabels);
                     System.out.println("Exercises for " + selectedCourse.getName() + ":");
@@ -146,7 +160,7 @@ public class Controller implements ControllerInterface{
 
                     }
                 } else {
-                    System.out.println("Sorry, that course is not available.");
+                    System.out.println("Sorry, that course is not available. check your energy levels");
                 }
             }
 
