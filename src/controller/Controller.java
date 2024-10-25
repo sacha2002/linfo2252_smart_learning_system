@@ -9,13 +9,45 @@ import models.courses.French;
 import models.courses.Spanish;
 import views.MainView;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller implements ControllerInterface{
+
+
+    public class clickButton implements ActionListener {
+        static String course = "";
+
+        public void actionPerformed(ActionEvent e) {
+
+
+            mv.ifPresent(mv -> {
+
+                if (e.getSource() == mv.getSpanishButton()) {
+                    course = "spanish";
+                } else if (e.getSource() == mv.getFrenchButton()) {
+                    course = "french";
+                } else if (e.getSource() == mv.getEnglishButton()) {
+                    course = "english";
+                }
+                Course selectedCourse = available_courses.get(course);
+                for (Exercise exercise : selectedCourse.getExercises()){
+                    mv.displayExercise(exercise.getText());
+
+
+
+            };
+        });
+        }
+    }
 
     Map<String, Course> available_courses =  new HashMap<>();
     Optional<MainView> mv = Optional.empty();
     Model model = new Model("OEM",0,false,30);
+
+
 
 
     public Controller(){
@@ -36,7 +68,8 @@ public class Controller implements ControllerInterface{
     @Override
     public boolean enableUIView() {
        mv =  Optional.of(new MainView());
-        return true;
+       mv.get().addButtonListeners(new clickButton());
+       return true;
     }
 
     @Override
@@ -57,6 +90,8 @@ public class Controller implements ControllerInterface{
         String course;
         Controller controller = new Controller();
         // Boucle infinie pour demander l'entrée
+        controller.enableUIView();
+
         while (true) {
             System.out.print("Which courses do you want to learn?, type exit to quit ");
             course = scanner.nextLine();
@@ -68,7 +103,7 @@ public class Controller implements ControllerInterface{
                 break;
             } else
             if (course.equalsIgnoreCase("view")) {
-                controller.enableUIView();
+
 
             } else {
 
@@ -83,7 +118,6 @@ public class Controller implements ControllerInterface{
                         System.out.println("- " + exercise.getText());
                         System.out.print("please write next to continue : ");
                         String input = scanner.nextLine();
-
 
                         while (!input.equalsIgnoreCase("next")) {
                             input = scanner.nextLine();
