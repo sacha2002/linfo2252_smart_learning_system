@@ -1,11 +1,11 @@
 package models;
 
 public enum Rank {
-    BRONZE(0,499,"bronze"),
-    SILVER(500,999,"silver"),
-    GOLD(1000,1499,"gold"),
-    PLATINUM(1500,1999,"platinum"),
-    DIAMOND(2000,Integer.MAX_VALUE,"diamond");
+    BRONZE(0,499,"Bronze"),
+    SILVER(500,999,"Silver"),
+    GOLD(1000,1499,"Gold"),
+    PLATINUM(1500,1999,"Platinum"),
+    DIAMOND(2000,Integer.MAX_VALUE,"Diamond");
 
     private final int lowerBound;
     private final int upperBound;

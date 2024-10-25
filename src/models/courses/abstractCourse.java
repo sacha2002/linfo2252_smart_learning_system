@@ -1,8 +1,11 @@
 package models.courses;
 
 import models.Exercises.Exercise;
+import models.Exercises.ExerciseData;
 import models.Logger;
+import models.Rank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 abstract class abstractCourse implements Course{
@@ -52,10 +55,22 @@ abstract class abstractCourse implements Course{
        boolean correct = exercise.checkUserAnswer(userAnswer);
        if(correct){
            courseRank++;
+           checkRankPromotion();
            logger.logChange(name + " course rank has ",name+id,this.toString());
            return true;
        }
        return false;
+    }
+
+    private void checkRankPromotion(){
+        if(courseRank > exercises.getFirst().getRank().getUpperBound()){
+            for (Rank rank : Rank.values()) {
+                if(courseRank < rank.getUpperBound() && courseRank>rank.getLowerBound()){
+                    exercises = ExerciseData.getExerciseLookup().getOrDefault(name+rank.getName(),new ArrayList<>());
+                    logger.logChange(name + " rank promotion! to " + rank.getName(),name+id,this.toString());
+                }
+            }
+        }
     }
 
     @Override
