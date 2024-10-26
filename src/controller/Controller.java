@@ -1,6 +1,7 @@
 package controller;
 
 import models.Exercises.Exercise;
+import models.Feature;
 import models.Logger;
 import models.Model;
 import models.courses.Course;
@@ -56,45 +57,31 @@ public class Controller implements ControllerInterface{
             });
         }
     }
-
-    List<String> available_courses =  new ArrayList<>();
     Optional<MainView> mv = Optional.empty();
     Model model = new Model("OEM",0,false,30);
 
 
 
     public Controller(){
-        available_courses.add("english");
-        available_courses.add("spanish");
-        available_courses.add("french");
+
     }
 
     @Override
     public int activate(String[] deactivations, String[] activations) {
-        for(String feat : activations){
-            if(feat.equals("courses")){
-                available_courses.add("english");
-                available_courses.add("spanish");
-                available_courses.add("french");
-            } else if( feat.equals("premium")){
-                model.setPremium(true);
-            }
+        for (String feat : activations) {
+            Feature feature = Feature.valueOf(feat.toUpperCase());
+            System.out.println(feature);
+            model.activateFeature(feature);
         }
 
-        for(String feat : deactivations){
-            if(feat.equals("courses")){
-                available_courses.remove("english");
-                available_courses.remove("spanish");
-                available_courses.remove("french");
-            } else if( feat.equals("premium")){
-                model.setPremium(false);
-            }
+        for (String feat : deactivations) {
+            Feature feature = Feature.valueOf(feat.toUpperCase());
+            model.deactivateFeature(feature);
         }
 
         return 0;
-        //energy system if premium or not
-        //courses if energy is 0
     }
+
 
     @Override
     public boolean enableUIView() {
@@ -141,7 +128,7 @@ public class Controller implements ControllerInterface{
 
                 Course selectedCourse = controller.model.getCourse(course);
 
-                if (selectedCourse != null && controller.available_courses.contains(course)) {
+                if (selectedCourse != null && controller.model.getAvailableCourses().contains(course)) {
                     // Course found, print exercises
                     controller.mv.ifPresent(MainView::clearLabels);
                     System.out.println("Exercises for " + selectedCourse.getName() + ":");

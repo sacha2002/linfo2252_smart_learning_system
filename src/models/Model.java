@@ -3,7 +3,6 @@ package models;
 import models.Energy.EnergyStrategy;
 import models.Energy.NormalUserEnergy;
 import models.Energy.PremiumUserEnergy;
-import models.Exercises.Exercise;
 import models.Exercises.ExerciseData;
 import models.courses.Course;
 import models.courses.English;
@@ -14,13 +13,16 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Model {
 
     private final Logger logger = Logger.getInstance();
 
      private final List<Course> coursesList = new ArrayList<>();
+     private final List<String> availableCourses =  new ArrayList<>();
      private String username;
 
      private int streak;
@@ -32,6 +34,8 @@ public class Model {
     private static final Duration rechargeInterval = Duration.ofMinutes(5);
     private EnergyStrategy energyStrategy;
 
+    private Set<Feature> activeFeatures = new HashSet<>();
+
     public Model(String username, int streak, boolean isPremium, int currentEnergy) {
         this.username = username;
         this.streak = streak;
@@ -42,17 +46,13 @@ public class Model {
         coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
         coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
         coursesList.add(new English(650, ExerciseData.getEnglishSilverExercises()));
+        //init avalibility
+        availableCourses.add("english");
+        availableCourses.add("spanish");
+        availableCourses.add("french");
 
         logger.logChange("user: " + username + " has been created", username, this.toString());
     }
-
-    //if he cant practice, the courses arent available
-    public List<Course> getCoursesList() {
-        if(energyStrategy.canPractice(currentEnergy))
-            return coursesList;
-        return new ArrayList<>();
-    }
-
 
     //Recharge energy based on time passed
     private void rechargeEnergy() {
@@ -71,6 +71,43 @@ public class Model {
             logger.logChange(username + " does not have enough energy to practice.", username, this.toString());
             return false;
         }
+    }
+
+    public void activateFeature(Feature feature) {
+        activeFeatures.add(feature);
+        switch (feature) {
+            case COURSES:
+                updateAvailableCourses(true);
+                break;
+            case ENERGY:
+                isPremium = true;
+                break;
+        }
+    }
+
+    public void deactivateFeature(Feature feature) {
+        activeFeatures.remove(feature);
+        switch (feature) {
+            case COURSES:
+                updateAvailableCourses(false);
+                break;
+            case ENERGY:
+                isPremium = false;
+                break;
+        }
+    }
+    private void updateAvailableCourses( boolean activate) {
+            if (activate) {
+                availableCourses.add("english");
+                availableCourses.add("spanish");
+                availableCourses.add("french");
+            } else {
+                availableCourses.clear();
+            }
+    }
+
+    public List<String> getAvailableCourses(){
+        return availableCourses;
     }
 
     public String getUsername() {
@@ -98,13 +135,25 @@ public class Model {
         logger.logChange(username + " streak updated to: " + streak, username, this.toString());
     }
 
+
+    //if it cant practice, no course is given( as second measure)
     public Course getCourse(String courseName){
+        if(!energyStrategy.canPractice(currentEnergy) && availableCourses.contains(courseName))
+            return null;
+
         for (Course c : coursesList) {
             if(courseName.equals(c.getName())){
                 return c;
             }
         }
         return null;
+    }
+
+    //if he cant practice, the courses arent available( as second measure)
+    public List<Course> getCoursesList() {
+        if(energyStrategy.canPractice(currentEnergy) && !availableCourses.isEmpty())
+            return coursesList;
+        return new ArrayList<>();
     }
 
 
