@@ -21,7 +21,6 @@ public class Controller implements ControllerInterface{
 
         public void actionPerformed(ActionEvent e) {
             mv.ifPresent(mv -> {
-
                 if (e.getSource() == mv.getSpanishButton()) {
                     course = "spanish";
                 } else if (e.getSource() == mv.getFrenchButton()) {
@@ -34,6 +33,9 @@ public class Controller implements ControllerInterface{
                     exercice_id = exercise.getId();
                     real_answer = exercise.getAnswer();
                     mv.displayExercise(exercise.getText());
+                    mv.getAnswerField().revalidate();
+                    mv.getAnswerField().repaint();
+
             };
         });
         }
@@ -43,17 +45,14 @@ public class Controller implements ControllerInterface{
 
         static String answer = "";
         public void actionPerformed(ActionEvent e){
-            System.out.println("okok");
             mv.ifPresent(mv -> {
-                answer = mv.getUserAnswer();
+                answer = mv.getAnswerField().getText();
                 if (answer.equals(real_answer)){
                     System.out.println("bonne réponse");
                 }
                 else {
                     System.out.println("Reessayez");
                 }
-
-
             });
         }
     }

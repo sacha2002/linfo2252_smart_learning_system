@@ -22,6 +22,8 @@ public class MainView {
     private JButton spanishButton;
     private JButton frenchButton;
     private JButton englishButton;
+    private JButton nextQuestionButton;
+    private JButton previousQuestionButton;
     private List<JLabel> exercises = new ArrayList<>();
     private List<Exercise> currentExercises = new ArrayList<>();
     private int currentExerciseIndex = 0;
@@ -43,9 +45,7 @@ public class MainView {
         topPanel.add(premiumLabel, BorderLayout.WEST); // Placer premiumLabel à gauche
         topPanel.add(scoreLabel,BorderLayout.EAST);
 
-        // Créer le panneau central pour ajouter des composants dynamiques
-        centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS)); // Empiler les labels verticalement
+        centerPanel = new JPanel(new GridBagLayout()); // Utiliser GridBagLayout pour le centerPanel
 
         // Créer le panneau des boutons de cours
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -53,6 +53,8 @@ public class MainView {
         frenchButton = new JButton("French");
         englishButton = new JButton("English");
         answerField = new JTextField("",20);
+        nextQuestionButton = new JButton(">");
+        previousQuestionButton = new JButton("<");
 
         buttonPanel.add(spanishButton);
         buttonPanel.add(frenchButton);
@@ -73,8 +75,6 @@ public class MainView {
         frame.add(mainPanel);
         frame.setVisible(true); // Afficher la fenêtre
 
-
-
         // Add key listener for arrow keys
         frame.addKeyListener(new KeyAdapter() {
             @Override
@@ -88,6 +88,28 @@ public class MainView {
         });
         frame.setFocusable(true);
     }
+
+    public void displayExercise(String question) {
+        this.clearLabels();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 0, 10, 0); // Add some padding
+
+        JLabel label1 = new JLabel(question, JLabel.CENTER);
+        centerPanel.add(label1, gbc);
+
+        gbc.gridy = 1; // Position the answerField below the label
+        centerPanel.add(answerField, gbc);
+
+
+        exercises.add(label1);
+        frame.repaint();
+        frame.revalidate();
+        answerField.requestFocusInWindow();
+    }
+
 
     public void addButtonsLister(ActionListener listener) {
         spanishButton.addActionListener(listener);
@@ -108,8 +130,8 @@ public class MainView {
     public JButton getSpanishButton(){
         return spanishButton;
     }
-    public String getUserAnswer(){
-        return answerField.getText();
+    public JTextField getAnswerField(){
+        return answerField;
     }
 
     private void showPreviousExercise() {
@@ -126,29 +148,7 @@ public class MainView {
         }
     }
 
-    public void displayExercise(String question) {
-        this.clearLabels();
-        JLabel label1 = new JLabel(question, JLabel.CENTER);
-        centerPanel.setLayout(new BorderLayout());
 
-
-        centerPanel.add(label1, BorderLayout.CENTER);
-        // Ajouter le champ d'entrée pour la réponse
-
-
-
-        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        answerField.setText("answer");
-        inputPanel.add(answerField);
-
-        centerPanel.add(inputPanel, BorderLayout.SOUTH);
-
-        exercises.add(label1);
-
-        frame.repaint();
-        frame.revalidate();
-
-    }
 
     private void togglePremiumMode() {
         if (premiumButton.getText().equals("premium")) {
