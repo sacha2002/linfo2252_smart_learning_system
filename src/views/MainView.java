@@ -14,7 +14,6 @@ import models.Exercises.Exercise;
 public class MainView {
 
     private JFrame frame;
-    private JPanel centerPanel;
     private JTextField answerField;
     private JLabel premiumLabel;
     private JLabel scoreLabel;
@@ -24,58 +23,61 @@ public class MainView {
     private JButton englishButton;
     private JButton nextQuestionButton;
     private JButton previousQuestionButton;
+    private JLabel questionLabel;
     private List<JLabel> exercises = new ArrayList<>();
     private List<Exercise> currentExercises = new ArrayList<>();
     private int currentExerciseIndex = 0;
 
+
     public MainView() {
-        this.frame = new JFrame("LEARNING APP");
+        // Configuration de la fenêtre principale
+        frame = new JFrame("LEARNING APP");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 600);
-        frame.setLayout(new BorderLayout()); // Utiliser BorderLayout pour le frame
+        frame.setLayout(null); // Positionnement absolu
 
-        // Créer un panel principal avec BorderLayout
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        // Labels en haut
+        premiumLabel = new JLabel("Free Mode");
+        premiumLabel.setBounds(10, 10, 140, 30); // X=10, Y=10, Largeur=100, Hauteur=30
+        frame.add(premiumLabel);
 
-        // Créer le topPanel pour le titre et le premiumLabel
-        JPanel topPanel = new JPanel(new BorderLayout());
-        premiumLabel = new JLabel("Free Mode", JLabel.LEFT);
-        scoreLabel = new JLabel("Score : ",JLabel.RIGHT);
+        scoreLabel = new JLabel("Score :");
+        scoreLabel.setBounds(490, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
+        frame.add(scoreLabel);
 
-        topPanel.add(premiumLabel, BorderLayout.WEST); // Placer premiumLabel à gauche
-        topPanel.add(scoreLabel,BorderLayout.EAST);
 
-        centerPanel = new JPanel(new GridBagLayout()); // Utiliser GridBagLayout pour le centerPanel
+        answerField = new JTextField(20);
+        answerField.setBounds(150, 250, 300, 30); // X=150, Y=250, Largeur=300, Hauteur=30
+        frame.add(answerField);
 
-        // Créer le panneau des boutons de cours
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        spanishButton = new JButton("Spanish");
-        frenchButton = new JButton("French");
-        englishButton = new JButton("English");
-        answerField = new JTextField("",20);
-        nextQuestionButton = new JButton(">");
+        // Boutons < et > de chaque côté du champ de réponse
         previousQuestionButton = new JButton("<");
+        previousQuestionButton.setBounds(100, 250, 45, 30); // À gauche de answerField
+        frame.add(previousQuestionButton);
 
-        buttonPanel.add(spanishButton);
-        buttonPanel.add(frenchButton);
-        buttonPanel.add(englishButton);
+        nextQuestionButton = new JButton(">");
+        nextQuestionButton.setBounds(455, 250, 45, 30); // À droite de answerField
+        frame.add(nextQuestionButton);
 
-        // Ajouter le bouton premium au bas du panel des boutons
+        // Panel pour les boutons de langue et Premium en bas
+        spanishButton = new JButton("Spanish");
+        spanishButton.setBounds(50, 500, 100, 30); // Position en bas à gauche
+        frame.add(spanishButton);
+
+        frenchButton = new JButton("French");
+        frenchButton.setBounds(175, 500, 100, 30);
+        frame.add(frenchButton);
+
+        englishButton = new JButton("English");
+        englishButton.setBounds(300, 500, 100, 30);
+        frame.add(englishButton);
+
         premiumButton = new JButton("Premium");
-        premiumButton.setPreferredSize(new Dimension(100, 26));
+        premiumButton.setBounds(425, 500, 100, 30); // Position en bas à droite
         premiumButton.addActionListener(e -> togglePremiumMode());
-        buttonPanel.add(premiumButton);
+        frame.add(premiumButton);
 
-        // Ajouter les panneaux au panneau principal
-        mainPanel.add(topPanel, BorderLayout.NORTH); // Placer le topPanel en haut
-        mainPanel.add(centerPanel, BorderLayout.CENTER); // Placer le centerPanel au centre
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH); // Placer le buttonPanel en bas
-
-        // Ajouter le panneau principal à la fenêtre
-        frame.add(mainPanel);
-        frame.setVisible(true); // Afficher la fenêtre
-
-        // Add key listener for arrow keys
+        // Écouteur de touches pour la navigation
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -87,24 +89,24 @@ public class MainView {
             }
         });
         frame.setFocusable(true);
+
+        // Afficher la fenêtre
+        frame.setVisible(true);
     }
 
     public void displayExercise(String question) {
         this.clearLabels();
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 0, 10, 0); // Add some padding
-
+        // Label de la question au centre de la fenêtre
         JLabel label1 = new JLabel(question, JLabel.CENTER);
-        centerPanel.add(label1, gbc);
+        label1.setBounds(0, 150, 600, 30); // Position : X=150, Y=150, largeur=300, hauteur=30
+        frame.add(label1);
 
-        gbc.gridy = 1; // Position the answerField below the label
-        centerPanel.add(answerField, gbc);
-
+        // Champ de réponse sous la question
+        answerField.setBounds(150, 250, 300, 30); // Position : X=150, Y=200
+        frame.add(answerField);
 
         exercises.add(label1);
+
         frame.repaint();
         frame.revalidate();
         answerField.requestFocusInWindow();
@@ -164,7 +166,7 @@ public class MainView {
 
     public void clearLabels() {
         for (JLabel label : exercises) {
-            centerPanel.remove(label);
+            frame.remove(label);
         }
     }
 
