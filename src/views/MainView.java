@@ -1,10 +1,6 @@
 package views;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -25,8 +21,8 @@ public class MainView {
     private JButton previousQuestionButton;
     private JLabel questionLabel;
     private List<JLabel> exercises = new ArrayList<>();
-    private List<Exercise> currentExercises = new ArrayList<>();
     private int currentExerciseIndex = 0;
+    private String course;
 
 
     public MainView() {
@@ -77,46 +73,38 @@ public class MainView {
         premiumButton.addActionListener(e -> togglePremiumMode());
         frame.add(premiumButton);
 
-        // Écouteur de touches pour la navigation
-        frame.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    showPreviousExercise();
-                } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    showNextExercise();
-                }
-            }
-        });
-        frame.setFocusable(true);
 
-        // Afficher la fenêtre
+        frame.setFocusable(true);
         frame.setVisible(true);
     }
 
-    public void displayExercise(String question) {
+    public void displayExercise(Exercise exercise) {
+        String question = exercise.getText();
+        int id = exercise.getId();
         this.clearLabels();
-        // Label de la question au centre de la fenêtre
         JLabel label1 = new JLabel(question, JLabel.CENTER);
-        label1.setBounds(0, 150, 600, 30); // Position : X=150, Y=150, largeur=300, hauteur=30
+        label1.setBounds(0, 150, 600, 30);
         frame.add(label1);
-
-        // Champ de réponse sous la question
-        answerField.setBounds(150, 250, 300, 30); // Position : X=150, Y=200
+        answerField.setBounds(150, 250, 300, 30);
         frame.add(answerField);
-
         exercises.add(label1);
-
+        currentExerciseIndex = id;
         frame.repaint();
         frame.revalidate();
         answerField.requestFocusInWindow();
     }
 
 
-    public void addButtonsLister(ActionListener listener) {
+    public void addCourseButtonListener(ActionListener listener) {
         spanishButton.addActionListener(listener);
         frenchButton.addActionListener(listener);
         englishButton.addActionListener(listener);
+        nextQuestionButton.addActionListener(listener);
+        previousQuestionButton.addActionListener(listener);
+    }
+    public void addChangeQuestionButtonListener(ActionListener listener){
+        nextQuestionButton.addActionListener(listener);
+        previousQuestionButton.addActionListener(listener);
     }
 
     public void addTextfieldListener(ActionListener listener){
@@ -136,20 +124,31 @@ public class MainView {
         return answerField;
     }
 
-    private void showPreviousExercise() {
-        if (currentExerciseIndex > 0) {
-            currentExerciseIndex--;
-            displayExercise(currentExercises.get(currentExerciseIndex).getText());
-        }
+    public JButton getPreviousQuestionButton() {
+        return previousQuestionButton;
     }
 
-    private void showNextExercise() {
-        if (currentExerciseIndex < currentExercises.size() - 1) {
-            currentExerciseIndex++;
-            displayExercise(currentExercises.get(currentExerciseIndex).getText());
-        }
+    public JButton getNextQuestionButton() {
+        return nextQuestionButton;
     }
 
+    public int getCurrentExerciceIndex() {
+        return currentExerciseIndex;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public void updateScore(int score) {
+        scoreLabel.setText("Score : " + score);
+        frame.repaint();
+        frame.revalidate();
+    }
 
 
     private void togglePremiumMode() {

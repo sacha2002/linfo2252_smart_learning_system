@@ -21,6 +21,7 @@ public class Exercise {
         this.hint = hint;
         this.id = idCounter;
         idCounter++;
+        if (idCounter==6) idCounter=0;
     }
 
     public String getHint() {

@@ -102,6 +102,31 @@ public class ExerciseData {
         return new ArrayList<>(frenchGoldExercises);
     }
 
+    public static List<Exercise> getAllSpanishExercices(){
+        List<Exercise> allSpanishExercises = new ArrayList<>();
+        allSpanishExercises.addAll(spanishBronzeExercises);
+        allSpanishExercises.addAll(spanishSilverExercises);
+        allSpanishExercises.addAll(spanishGoldExercises);
+        return allSpanishExercises;
+    }
+
+    public static List<Exercise> getAllFrenchExercices(){
+        List<Exercise> allFrenchExercises = new ArrayList<>();
+        allFrenchExercises.addAll(frenchBronzeExercises);
+        allFrenchExercises.addAll(frenchSilverExercises);
+        allFrenchExercises.addAll(frenchGoldExercises);
+        return allFrenchExercises;
+    }
+
+    public static List<Exercise> getAllEnglishExercices(){
+        List<Exercise> allEnglishExercises = new ArrayList<>();
+        allEnglishExercises.addAll(englishBronzeExercises);
+        allEnglishExercises.addAll(englishSilverExercises);
+        allEnglishExercises.addAll(englishGoldExercises);
+        return allEnglishExercises;
+    }
+
+
     public static Map<String,List<Exercise>> getExerciseLookup(){
         return exerciseLookup;
     }

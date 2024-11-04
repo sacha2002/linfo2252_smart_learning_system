@@ -43,9 +43,12 @@ public class Model {
         this.currentEnergy = currentEnergy;
         this.energyStrategy = isPremium ? new PremiumUserEnergy() : new NormalUserEnergy();
         //all rank in silver just for demo
-        coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
-        coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
-        coursesList.add(new English(650, ExerciseData.getEnglishSilverExercises()));
+        //coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
+        //coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
+        //coursesList.add(new English(650, ExerciseData.getEnglishSilverExercises()));
+        coursesList.add(new Spanish(650, ExerciseData.getAllSpanishExercices()));
+        coursesList.add(new English(650, ExerciseData.getAllEnglishExercices()));
+        coursesList.add(new French(650, ExerciseData.getAllFrenchExercices()));
         //init avalibility
         availableCourses.add("english");
         availableCourses.add("spanish");
@@ -142,7 +145,7 @@ public class Model {
             return null;
 
         for (Course c : coursesList) {
-            if(courseName.equals(c.getName())){
+            if(courseName != null && courseName.equals(c.getName())){
                 return c;
             }
         }
