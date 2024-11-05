@@ -19,6 +19,28 @@ public class Controller implements ControllerInterface{
     private String real_answer;
     private Exercise current_exercice;
 
+
+
+        public class passToPremium implements ActionListener {
+            private boolean isPremium = false;
+            public void actionPerformed(ActionEvent e) {
+                mv.ifPresent(mv -> {
+                    if (e.getSource() == mv.getPremiumButton()) {
+                        if (isPremium) {
+                            isPremium = false;
+                            activate(new String[]{"PREMIUM"}, new String[]{});
+                            mv.setPremiumLabel("Free Mode");
+                        } else {
+                            isPremium = true;
+                            activate(new String[]{}, new String[]{"PREMIUM"});
+                            mv.setPremiumLabel("Premium Mode");
+                        }
+
+                    }
+                });
+            }
+        }
+
         public class chooseCourse implements ActionListener {
             static String course = "";
 
@@ -33,7 +55,7 @@ public class Controller implements ControllerInterface{
                     }
                     mv.setCourse(course);
                     Course selectedCourse = model.getCourse(course);
-                    if (selectedCourse != null) {
+                    if (selectedCourse != null && model.getCoursesList().contains(selectedCourse)) {
                         current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
                         mv.displayExercise(current_exercice);
                         mv.getAnswerField().revalidate();
@@ -64,16 +86,37 @@ public class Controller implements ControllerInterface{
                                 points += 5;
                                 break;
                         }
-
                         mv.updateScore(points);
                     }
                 });
             }
         }
 
-        public class changeQuestion implements ActionListener {
+        public class activateCourse implements ActionListener {
+            private boolean isActivated = false;
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
+                    if (e.getSource() == mv.getActivateCourseButton()) {
+                        if (isActivated) {
+                            isActivated = false;
+                            activate(new String[]{"COURSES"}, new String[]{});
+
+                        } else {
+                            isActivated = true;
+                            activate(new String[]{}, new String[]{"COURSES"});
+                        }
+
+            }});
+            }
+            }
+
+        public class changeQuestion implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+
+                mv.ifPresent(mv -> {
+                    if (!model.getAvailableCourses().contains(mv.getCourse())) {
+                        return;
+                    }
                     int index = mv.getCurrentExerciceIndex();
                     if (e.getSource() == mv.getPreviousQuestionButton()) {
                         if (index > 0) {
@@ -94,7 +137,7 @@ public class Controller implements ControllerInterface{
         }
 
         Optional<MainView> mv = Optional.empty();
-        Model model = new Model("OEM", 0, false, 30);
+        Model model = new Model("OEM", 0, 30);
 
 
         public Controller() {
@@ -112,7 +155,6 @@ public class Controller implements ControllerInterface{
                 Feature feature = Feature.valueOf(feat.toUpperCase());
                 model.deactivateFeature(feature);
             }
-
             return 0;
         }
 
@@ -123,6 +165,8 @@ public class Controller implements ControllerInterface{
             mv.get().addCourseButtonListener(new chooseCourse());
             mv.get().addTextfieldListener(new enterAnswer());
             mv.get().addChangeQuestionButtonListener(new changeQuestion());
+            mv.get().addPremiumButtonListener(new passToPremium());
+            mv.get().addActivateCourseButtonListener(new activateCourse());
             return true;
         }
 
@@ -142,5 +186,6 @@ public class Controller implements ControllerInterface{
         public static void main(String[] args) throws Exception {
             Controller controller = new Controller();
             controller.enableUIView();
+            controller.activate(new String[]{"PREMIUM"}, new String[]{});
         }
     }

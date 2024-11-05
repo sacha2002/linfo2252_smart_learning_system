@@ -14,12 +14,12 @@ public class MainView {
     private JLabel premiumLabel;
     private JLabel scoreLabel;
     private JButton premiumButton;
+    private JButton activateCourseButton;
     private JButton spanishButton;
     private JButton frenchButton;
     private JButton englishButton;
     private JButton nextQuestionButton;
     private JButton previousQuestionButton;
-    private JLabel questionLabel;
     private List<JLabel> exercises = new ArrayList<>();
     private int currentExerciseIndex = 0;
     private String course;
@@ -37,7 +37,7 @@ public class MainView {
         premiumLabel.setBounds(10, 10, 140, 30); // X=10, Y=10, Largeur=100, Hauteur=30
         frame.add(premiumLabel);
 
-        scoreLabel = new JLabel("Score :");
+        scoreLabel = new JLabel("Score : 0");
         scoreLabel.setBounds(490, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
         frame.add(scoreLabel);
 
@@ -70,8 +70,11 @@ public class MainView {
 
         premiumButton = new JButton("Premium");
         premiumButton.setBounds(425, 500, 100, 30); // Position en bas à droite
-        premiumButton.addActionListener(e -> togglePremiumMode());
         frame.add(premiumButton);
+
+        activateCourseButton = new JButton("Activate Course");
+        activateCourseButton.setBounds(425, 450, 150, 30);
+        frame.add(activateCourseButton);
 
 
         frame.setFocusable(true);
@@ -99,16 +102,22 @@ public class MainView {
         spanishButton.addActionListener(listener);
         frenchButton.addActionListener(listener);
         englishButton.addActionListener(listener);
-        nextQuestionButton.addActionListener(listener);
-        previousQuestionButton.addActionListener(listener);
     }
+
     public void addChangeQuestionButtonListener(ActionListener listener){
         nextQuestionButton.addActionListener(listener);
         previousQuestionButton.addActionListener(listener);
     }
 
+    public void addPremiumButtonListener(ActionListener listener){
+        premiumButton.addActionListener(listener);
+    }
+
     public void addTextfieldListener(ActionListener listener){
         answerField.addActionListener(listener);
+    }
+    public void addActivateCourseButtonListener(ActionListener listener){
+        activateCourseButton.addActionListener(listener);
     }
 
     public JButton getEnglishButton(){
@@ -132,6 +141,13 @@ public class MainView {
         return nextQuestionButton;
     }
 
+    public JButton getPremiumButton(){
+        return premiumButton;
+    }
+
+    public JButton getActivateCourseButton(){
+        return activateCourseButton;
+    }
     public int getCurrentExerciceIndex() {
         return currentExerciseIndex;
     }
@@ -144,6 +160,12 @@ public class MainView {
         this.course = course;
     }
 
+    public void setPremiumLabel(String text){
+        premiumLabel.setText(text);
+        frame.repaint();
+        frame.revalidate();
+    }
+
     public void updateScore(int score) {
         scoreLabel.setText("Score : " + score);
         frame.repaint();
@@ -151,17 +173,7 @@ public class MainView {
     }
 
 
-    private void togglePremiumMode() {
-        if (premiumButton.getText().equals("premium")) {
-            premiumLabel.setText("premium mode");
-            premiumButton.setText("free");
-        } else {
-            premiumLabel.setText("free mode");
-            premiumButton.setText("premium");
-        }
-        frame.repaint();
-        frame.revalidate();
-    }
+
 
     public void clearLabels() {
         for (JLabel label : exercises) {

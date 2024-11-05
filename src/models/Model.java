@@ -36,10 +36,9 @@ public class Model {
 
     private Set<Feature> activeFeatures = new HashSet<>();
 
-    public Model(String username, int streak, boolean isPremium, int currentEnergy) {
+    public Model(String username, int streak, int currentEnergy) {
         this.username = username;
         this.streak = streak;
-        this.isPremium = isPremium;
         this.currentEnergy = currentEnergy;
         this.energyStrategy = isPremium ? new PremiumUserEnergy() : new NormalUserEnergy();
         //all rank in silver just for demo
@@ -50,9 +49,7 @@ public class Model {
         coursesList.add(new English(650, ExerciseData.getAllEnglishExercices()));
         coursesList.add(new French(650, ExerciseData.getAllFrenchExercices()));
         //init avalibility
-        availableCourses.add("english");
-        availableCourses.add("spanish");
-        availableCourses.add("french");
+
 
         logger.logChange("user: " + username + " has been created", username, this.toString());
     }
@@ -82,7 +79,7 @@ public class Model {
             case COURSES:
                 updateAvailableCourses(true);
                 break;
-            case ENERGY:
+            case PREMIUM:
                 isPremium = true;
                 break;
         }
@@ -94,7 +91,7 @@ public class Model {
             case COURSES:
                 updateAvailableCourses(false);
                 break;
-            case ENERGY:
+            case PREMIUM:
                 isPremium = false;
                 break;
         }
