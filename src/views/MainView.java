@@ -6,13 +6,16 @@ import java.util.List;
 import javax.swing.*;
 
 import models.Exercises.Exercise;
+import models.Observer;
+import models.Rank;
 
-public class MainView {
+public class MainView implements Observer {
 
     private JFrame frame;
     private JTextField answerField;
     private JLabel premiumLabel;
     private JLabel scoreLabel;
+    private JLabel rankLabel;
     private JButton premiumButton;
     private JButton activateCourseButton;
     private JButton spanishButton;
@@ -40,6 +43,10 @@ public class MainView {
         scoreLabel = new JLabel("Score : 0");
         scoreLabel.setBounds(490, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
         frame.add(scoreLabel);
+
+        rankLabel = new JLabel("Rank : None");
+        rankLabel.setBounds(390, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
+        frame.add(rankLabel);
 
 
         answerField = new JTextField(20);
@@ -166,14 +173,22 @@ public class MainView {
         frame.revalidate();
     }
 
+    public void updateRank(String rank){
+        rankLabel.setText("Rank : " + rank);
+        frame.repaint();
+        frame.revalidate();
+    }
+
     public void updateScore(int score) {
         scoreLabel.setText("Score : " + score);
         frame.repaint();
         frame.revalidate();
     }
 
-
-
+    @Override
+    public void update(String message) {
+        updateRank(message);
+    }
 
     public void clearLabels() {
         for (JLabel label : exercises) {

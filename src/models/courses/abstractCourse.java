@@ -3,6 +3,7 @@ package models.courses;
 import models.Exercises.Exercise;
 import models.Exercises.ExerciseData;
 import models.Logger;
+import models.Observer;
 import models.Rank;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ abstract class abstractCourse implements Course{
     private List<Exercise> exercises;
     private int courseRank;
     private static int id;
+    private final List<Observer> observers = new ArrayList<>();
 
     private final Logger logger = Logger.getInstance();
 
@@ -56,7 +58,7 @@ abstract class abstractCourse implements Course{
        if(correct){
            courseRank++;
            checkRankPromotion();
-           logger.logChange(name + " course rank has ",name+id,this.toString());
+           logger.logChange(name + " course score increased to" + courseRank,name+id,this.toString());
            return true;
        }
        return false;
@@ -67,6 +69,7 @@ abstract class abstractCourse implements Course{
             for (Rank rank : Rank.values()) {
                 if(courseRank < rank.getUpperBound() && courseRank>rank.getLowerBound()){
                     exercises = ExerciseData.getExerciseLookup().getOrDefault(name+rank.getName(),new ArrayList<>());
+                    notifyObservers(rank.getName());
                     logger.logChange(name + " rank promotion! to " + rank.getName(),name+id,this.toString());
                 }
             }
@@ -86,5 +89,19 @@ abstract class abstractCourse implements Course{
                 ", courseRank=" + courseRank +
                 ", logger=" + logger +
                 '}';
+    }
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
     }
 }

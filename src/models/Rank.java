@@ -28,4 +28,13 @@ public enum Rank {
     public String getName() {
         return name;
     }
+
+    public static Rank getRankByNumber(int number) {
+        for (Rank rank : Rank.values()) {
+            if (number >= rank.getLowerBound() && number <= rank.getUpperBound()) {
+                return rank;
+            }
+        }
+        throw new IllegalArgumentException("No rank found for number: " + number);
+    }
 }

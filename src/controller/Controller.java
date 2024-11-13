@@ -3,6 +3,7 @@ package controller;
 import models.Exercises.Exercise;
 import models.Logger;
 import models.Model;
+import models.Rank;
 import models.courses.Course;
 import models.features.FeatureCommand;
 import views.MainView;
@@ -16,6 +17,7 @@ public class Controller implements ControllerInterface{
     private int exercice_id;
     private int points = 0;
     private String real_answer;
+    private Course selectedCourse;
     private Exercise current_exercice;
 
 
@@ -54,10 +56,16 @@ public class Controller implements ControllerInterface{
                         course = "english";
                     }
                     mv.setCourse(course);
-                    Course selectedCourse = model.getCourse(course);
+                    if(model.getCourse(course)!= selectedCourse){
+
+                        selectedCourse = model.getCourse(course);
+                        selectedCourse.addObserver(mv);
+                    }
+
                     if (selectedCourse != null && model.getCoursesList().contains(selectedCourse)) {
                         current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
                         mv.displayExercise(current_exercice);
+                        mv.updateRank(Rank.getRankByNumber(selectedCourse.getCourseRank()).getName());
                         mv.getAnswerField().revalidate();
                         mv.getAnswerField().repaint();
                     }
@@ -72,20 +80,8 @@ public class Controller implements ControllerInterface{
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
                     answer = mv.getAnswerField().getText();
-                    real_answer = current_exercice.getAnswer();
-                    if (answer.equals(real_answer)) {
-
-                        switch (current_exercice.getRank()) {
-                            case BRONZE:
-                                points += 1;
-                                break;
-                            case SILVER:
-                                points += 3;
-                                break;
-                            case GOLD:
-                                points += 5;
-                                break;
-                        }
+                    if (selectedCourse.practice(current_exercice,answer)) {
+                        points++;
                         mv.updateScore(points);
                     }
                 });
@@ -121,13 +117,15 @@ public class Controller implements ControllerInterface{
                     if (e.getSource() == mv.getPreviousQuestionButton()) {
                         if (index > 0) {
                             index--;
-                            mv.displayExercise(model.getCourse(mv.getCourse()).getExercises().get(index));
+                            current_exercice =model.getCourse(mv.getCourse()).getExercises().get(index);
+                            mv.displayExercise(current_exercice);
                         }
                     } else if (e.getSource() == mv.getNextQuestionButton()) {
                         Course course = model.getCourse(mv.getCourse());
                         if (course != null && index < course.getExercises().size() - 1) {
                             index++;
-                            mv.displayExercise(model.getCourse(mv.getCourse()).getExercises().get(index));
+                            current_exercice =model.getCourse(mv.getCourse()).getExercises().get(index);
+                            mv.displayExercise(current_exercice);
                         }
                     }
                     ;
