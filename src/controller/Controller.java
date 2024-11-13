@@ -56,8 +56,7 @@ public class Controller implements ControllerInterface{
                         course = "english";
                     }
                     mv.setCourse(course);
-                    if(model.getCourse(course)!= selectedCourse){
-
+                    if(selectedCourse == null || !Objects.equals(course, selectedCourse.getName())){
                         selectedCourse = model.getCourse(course);
                         selectedCourse.addObserver(mv);
                     }
