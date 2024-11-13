@@ -1,11 +1,10 @@
 package controller;
 
 import models.Exercises.Exercise;
-import models.Feature;
 import models.Logger;
 import models.Model;
-import models.Rank;
 import models.courses.Course;
+import models.features.FeatureCommand;
 import views.MainView;
 
 import java.awt.event.ActionEvent;
@@ -18,6 +17,7 @@ public class Controller implements ControllerInterface{
     private int points = 0;
     private String real_answer;
     private Exercise current_exercice;
+
 
 
 
@@ -146,14 +146,12 @@ public class Controller implements ControllerInterface{
         @Override
         public int activate(String[] deactivations, String[] activations) {
             for (String feat : activations) {
-                Feature feature = Feature.valueOf(feat.toUpperCase());
-                System.out.println(feature);
-                model.activateFeature(feature);
+                System.out.println(feat);
+                model.activateFeature(feat);
             }
 
             for (String feat : deactivations) {
-                Feature feature = Feature.valueOf(feat.toUpperCase());
-                model.deactivateFeature(feature);
+                model.deactivateFeature(feat);
             }
             return 0;
         }

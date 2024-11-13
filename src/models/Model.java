@@ -8,14 +8,14 @@ import models.courses.Course;
 import models.courses.English;
 import models.courses.French;
 import models.courses.Spanish;
+import models.features.CoursesCommand;
+import models.features.FeatureCommand;
+import models.features.PremiumCommand;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Model {
 
@@ -34,7 +34,7 @@ public class Model {
     private static final Duration rechargeInterval = Duration.ofMinutes(5);
     private EnergyStrategy energyStrategy;
 
-    private Set<Feature> activeFeatures = new HashSet<>();
+    private Set<FeatureCommand> activeFeatures = new HashSet<>();
 
     public Model(String username, int streak, int currentEnergy) {
         this.username = username;
@@ -48,8 +48,9 @@ public class Model {
         coursesList.add(new Spanish(650, ExerciseData.getAllSpanishExercices()));
         coursesList.add(new English(650, ExerciseData.getAllEnglishExercices()));
         coursesList.add(new French(650, ExerciseData.getAllFrenchExercices()));
-        //init avalibility
-
+        //init features
+        activeFeatures.add(new CoursesCommand(this));
+        activeFeatures.add(new PremiumCommand(this));
 
         logger.logChange("user: " + username + " has been created", username, this.toString());
     }
@@ -73,30 +74,29 @@ public class Model {
         }
     }
 
-    public void activateFeature(Feature feature) {
-        activeFeatures.add(feature);
-        switch (feature) {
-            case COURSES:
-                updateAvailableCourses(true);
-                break;
-            case PREMIUM:
-                isPremium = true;
-                break;
+    private FeatureCommand getCommandByName( String name) {
+        return activeFeatures.stream()
+                .filter(command -> command.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
+
+
+    public void activateFeature(String name) {
+         FeatureCommand command = getCommandByName(name);
+        if (command != null) {
+            command.execute();
         }
     }
 
-    public void deactivateFeature(Feature feature) {
-        activeFeatures.remove(feature);
-        switch (feature) {
-            case COURSES:
-                updateAvailableCourses(false);
-                break;
-            case PREMIUM:
-                isPremium = false;
-                break;
+    public void deactivateFeature(String name) {
+        FeatureCommand command = getCommandByName(name);
+        if (command != null) {
+            command.undo();
         }
     }
-    private void updateAvailableCourses( boolean activate) {
+
+    public void updateAvailableCourses( boolean activate) {
             if (activate) {
                 availableCourses.add("english");
                 availableCourses.add("spanish");
@@ -155,7 +155,6 @@ public class Model {
             return coursesList;
         return new ArrayList<>();
     }
-
 
 
     public boolean isPremium() {
