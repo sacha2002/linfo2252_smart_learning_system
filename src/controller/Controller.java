@@ -24,17 +24,19 @@ public class Controller implements ControllerInterface{
 
 
         public class passToPremium implements ActionListener {
-            private boolean isPremium = false;
+            private boolean isPremium = true;
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
                     if (e.getSource() == mv.getPremiumButton()) {
                         if (isPremium) {
                             isPremium = false;
                             activate(new String[]{"PREMIUM"}, new String[]{});
-                            mv.setPremiumLabel("Free Mode");
+                            model.getEnergySystem().addObserver(mv.getPremiumLabelObserver());
+                            mv.setPremiumLabel("Free Mode: "+ model.getEnergySystem().getCurrentEnergy()+"/"+model.getEnergySystem().getMaxEnergy());
                         } else {
                             isPremium = true;
                             activate(new String[]{}, new String[]{"PREMIUM"});
+                            model.getEnergySystem().removeObserver(mv.getPremiumLabelObserver());
                             mv.setPremiumLabel("Premium Mode");
                         }
 
@@ -58,7 +60,7 @@ public class Controller implements ControllerInterface{
                     mv.setCourse(course);
                     if(selectedCourse == null || !Objects.equals(course, selectedCourse.getName())){
                         selectedCourse = model.getCourse(course);
-                        selectedCourse.addObserver(mv);
+                        selectedCourse.addObserver(mv.getRankLabelObserver());
                     }
 
                     if (selectedCourse != null && model.getCoursesList().contains(selectedCourse)) {
@@ -79,6 +81,9 @@ public class Controller implements ControllerInterface{
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
                     answer = mv.getAnswerField().getText();
+                    if( !model.practice()){
+                            return;
+                    }
                     if (selectedCourse.practice(current_exercice,answer)) {
                         points++;
                         mv.updateScore(points);
@@ -134,7 +139,7 @@ public class Controller implements ControllerInterface{
         }
 
         Optional<MainView> mv = Optional.empty();
-        Model model = new Model("OEM", 0, 30);
+        Model model = new Model("OEM", 0);
 
 
         public Controller() {
@@ -181,6 +186,6 @@ public class Controller implements ControllerInterface{
         public static void main(String[] args) throws Exception {
             Controller controller = new Controller();
             controller.enableUIView();
-            controller.activate(new String[]{"PREMIUM"}, new String[]{});
+            controller.activate(new String[]{}, new String[]{});
         }
     }

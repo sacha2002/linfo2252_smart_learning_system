@@ -6,10 +6,8 @@ import java.util.List;
 import javax.swing.*;
 
 import models.Exercises.Exercise;
-import models.Observer;
-import models.Rank;
 
-public class MainView implements Observer {
+public class MainView {
 
     private JFrame frame;
     private JTextField answerField;
@@ -28,6 +26,9 @@ public class MainView implements Observer {
     private String course;
 
 
+    private RankLabelObserver rankLabelObserver;
+    private PremiumLabelObserver premiumLabelObserver;
+
     public MainView() {
         // Configuration de la fenêtre principale
         frame = new JFrame("LEARNING APP");
@@ -36,7 +37,7 @@ public class MainView implements Observer {
         frame.setLayout(null); // Positionnement absolu
 
         // Labels en haut
-        premiumLabel = new JLabel("Free Mode");
+        premiumLabel = new JLabel("Premium Mode");
         premiumLabel.setBounds(10, 10, 140, 30); // X=10, Y=10, Largeur=100, Hauteur=30
         frame.add(premiumLabel);
 
@@ -48,6 +49,8 @@ public class MainView implements Observer {
         rankLabel.setBounds(390, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
         frame.add(rankLabel);
 
+        rankLabelObserver = new RankLabelObserver(rankLabel);
+        premiumLabelObserver = new PremiumLabelObserver(premiumLabel);
 
         answerField = new JTextField(20);
         answerField.setBounds(150, 250, 300, 30); // X=150, Y=250, Largeur=300, Hauteur=30
@@ -185,11 +188,6 @@ public class MainView implements Observer {
         frame.revalidate();
     }
 
-    @Override
-    public void update(String message) {
-        updateRank(message);
-    }
-
     public void clearLabels() {
         for (JLabel label : exercises) {
             frame.remove(label);
@@ -198,5 +196,14 @@ public class MainView implements Observer {
 
     public void closeWindow() {
         frame.dispose();
+    }
+
+
+    public PremiumLabelObserver getPremiumLabelObserver() {
+        return premiumLabelObserver;
+    }
+
+    public RankLabelObserver getRankLabelObserver() {
+        return rankLabelObserver;
     }
 }
