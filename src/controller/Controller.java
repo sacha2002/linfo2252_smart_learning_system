@@ -15,10 +15,8 @@ import java.util.*;
 public class Controller implements ControllerInterface{
 
     private int exercice_id;
-    private int points = 0;
     private String real_answer;
     private Course selectedCourse;
-    private Exercise current_exercice;
 
 
 
@@ -32,6 +30,7 @@ public class Controller implements ControllerInterface{
                             isPremium = false;
                             activate(new String[]{"PREMIUM"}, new String[]{});
                             model.getEnergySystem().addObserver(mv.getPremiumLabelObserver());
+                            //initial state
                             mv.setPremiumLabel("Free Mode: "+ model.getEnergySystem().getCurrentEnergy()+"/"+model.getEnergySystem().getMaxEnergy());
                         } else {
                             isPremium = true;
@@ -64,9 +63,11 @@ public class Controller implements ControllerInterface{
                     }
 
                     if (selectedCourse != null && model.getCoursesList().contains(selectedCourse)) {
-                        current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
-                        mv.displayExercise(current_exercice);
+                        Exercise current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
+                        mv.displayExercise(current_exercice,selectedCourse.getExcerciseIndex(current_exercice));
+
                         mv.updateRank(Rank.getRankByNumber(selectedCourse.getCourseRank()).getName());
+                        mv.updateScore(selectedCourse.getCourseRank());
                         mv.getAnswerField().revalidate();
                         mv.getAnswerField().repaint();
                     }
@@ -84,13 +85,27 @@ public class Controller implements ControllerInterface{
                     if( !model.practice()){
                             return;
                     }
+                    Exercise current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
                     if (selectedCourse.practice(current_exercice,answer)) {
-                        points++;
-                        mv.updateScore(points);
+                        mv.updateScore(selectedCourse.getCourseRank());
                     }
                 });
             }
         }
+
+    public class getHint implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            mv.ifPresent(mv -> {
+                Exercise current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
+                if (model.isPremium()) {
+                    System.out.println(current_exercice.getHint());
+                }else{
+                    System.out.println("Pay us for hint");
+                }
+            });
+        }
+    }
 
         public class activateCourse implements ActionListener {
             private boolean isActivated = false;
@@ -118,18 +133,22 @@ public class Controller implements ControllerInterface{
                         return;
                     }
                     int index = mv.getCurrentExerciceIndex();
+
                     if (e.getSource() == mv.getPreviousQuestionButton()) {
                         if (index > 0) {
                             index--;
-                            current_exercice =model.getCourse(mv.getCourse()).getExercises().get(index);
-                            mv.displayExercise(current_exercice);
+
+                            Course course = model.getCourse(mv.getCourse());
+                            Exercise current_exercice = course.getExercises().get(index);
+                            mv.displayExercise(current_exercice,course.getExcerciseIndex(current_exercice));
                         }
                     } else if (e.getSource() == mv.getNextQuestionButton()) {
                         Course course = model.getCourse(mv.getCourse());
+
                         if (course != null && index < course.getExercises().size() - 1) {
                             index++;
-                            current_exercice =model.getCourse(mv.getCourse()).getExercises().get(index);
-                            mv.displayExercise(current_exercice);
+                            Exercise current_exercice =course.getExercises().get(index);
+                            mv.displayExercise(current_exercice,course.getExcerciseIndex(current_exercice));
                         }
                     }
                     ;
@@ -164,6 +183,7 @@ public class Controller implements ControllerInterface{
             mv = Optional.of(new MainView());
             mv.get().addCourseButtonListener(new chooseCourse());
             mv.get().addTextfieldListener(new enterAnswer());
+            mv.get().addHintButtonListener( new getHint());
             mv.get().addChangeQuestionButtonListener(new changeQuestion());
             mv.get().addPremiumButtonListener(new passToPremium());
             mv.get().addActivateCourseButtonListener(new activateCourse());
@@ -186,6 +206,6 @@ public class Controller implements ControllerInterface{
         public static void main(String[] args) throws Exception {
             Controller controller = new Controller();
             controller.enableUIView();
-            controller.activate(new String[]{}, new String[]{});
+            controller.activate(new String[]{}, new String[]{"PREMIUM"});
         }
     }

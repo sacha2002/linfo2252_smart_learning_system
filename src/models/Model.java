@@ -35,12 +35,12 @@ public class Model {
         this.streak = streak;
         this.energySystem = new EnergySystem(false);
         //all rank in silver just for demo
-        //coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
-        //coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
-        //coursesList.add(new English(650, ExerciseData.getEnglishSilverExercises()));
-        coursesList.add(new Spanish(650, ExerciseData.getAllSpanishExercices()));
-        coursesList.add(new English(650, ExerciseData.getAllEnglishExercices()));
-        coursesList.add(new French(650, ExerciseData.getAllFrenchExercices()));
+        coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
+        coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
+        coursesList.add(new English(998, ExerciseData.getEnglishSilverExercises()));
+        //coursesList.add(new Spanish(650, ExerciseData.getAllSpanishExercices()));
+        //coursesList.add(new English(650, ExerciseData.getAllEnglishExercices()));
+        //coursesList.add(new French(650, ExerciseData.getAllFrenchExercices()));
         //init features
         activeFeatures.add(new CoursesCommand(this));
         activeFeatures.add(new PremiumCommand(this));
@@ -50,7 +50,7 @@ public class Model {
 
 
     public boolean practice() {
-        energySystem.rechargeEnergy();
+       // energySystem.rechargeEnergy();
         if (energySystem.canPractice()) {
             energySystem.useEnergy();
             logger.logChange(username + " practiced! Current energy: " + energySystem.getCurrentEnergy(), username, this.toString());
@@ -97,17 +97,11 @@ public class Model {
         return availableCourses;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public int getStreak() {
         return streak;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     private void updateStreak() {
         LocalDate today = LocalDate.now();
@@ -153,6 +147,10 @@ public class Model {
         energySystem.setPremium(premium);
         String premiumMessage = premium ? "is now premium" : "is no longer premium";
         logger.logChange(username + " " + premiumMessage, username, this.toString());
+    }
+
+    public boolean isPremium(){
+        return energySystem.isPremium();
     }
 
     @Override

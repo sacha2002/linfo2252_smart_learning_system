@@ -3,6 +3,8 @@ package models.Exercises;
 import models.Logger;
 import models.Rank;
 
+import java.util.Objects;
+
 public class Exercise {
 
     protected final Logger logger = Logger.getInstance();
@@ -12,7 +14,8 @@ public class Exercise {
     protected Rank rank;
     protected String answer;
     protected String hint;
-    protected int id;
+
+    protected int id; //single identifier for logs
 
     public Exercise(String text, Rank rank, String answer, String hint) {
         this.text = text;
@@ -21,7 +24,6 @@ public class Exercise {
         this.hint = hint;
         this.id = idCounter;
         idCounter++;
-        if (idCounter==6) idCounter=0;
     }
 
     public String getHint() {
@@ -46,15 +48,12 @@ public class Exercise {
     }
 
     public boolean checkUserAnswer(String userAnswer) {
-        boolean correct = answer.equals(userAnswer);
+        boolean correct = answer.equalsIgnoreCase(userAnswer);
 
         logger.logChange(correct? "correct answer!" : "wrong answer!",text+id,this.toString());
         return correct;
     }
 
-    public void ask(){
-
-    }
 
     @Override
     public String toString() {
@@ -62,5 +61,24 @@ public class Exercise {
                 "rank=" + rank +
                 ", text='" + text + '\'' +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Exercise exercise = (Exercise) o;
+        return id == exercise.id && rank == exercise.rank && Objects.equals(answer, exercise.answer) && Objects.equals(hint, exercise.hint);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rank, answer, hint, id);
+    }
+
+    //for children
+    public void ask(){
+
     }
 }

@@ -14,4 +14,5 @@ public interface Course {
     boolean practice( Exercise exercise,String userAnswer);
     void addObserver(Observer observer);
     void removeObserver(Observer observer);
+    int getExcerciseIndex(Exercise exercise);
 }

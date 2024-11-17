@@ -58,7 +58,7 @@ abstract class abstractCourse implements Course{
        if(correct){
            courseRank++;
            checkRankPromotion();
-           logger.logChange(name + " course score increased to" + courseRank,name+id,this.toString());
+           logger.logChange(name + " course score increased to " + courseRank,name+id,this.toString());
            return true;
        }
        return false;
@@ -67,13 +67,18 @@ abstract class abstractCourse implements Course{
     private void checkRankPromotion(){
         if(courseRank > exercises.getFirst().getRank().getUpperBound()){
             for (Rank rank : Rank.values()) {
-                if(courseRank < rank.getUpperBound() && courseRank>rank.getLowerBound()){
+                if(courseRank <= rank.getUpperBound() && courseRank >= rank.getLowerBound()){
                     exercises = ExerciseData.getExerciseLookup().getOrDefault(name+rank.getName(),new ArrayList<>());
-                    notifyObservers(rank.getName());
+                    notifyObservers(rank.getName(),exercises.getFirst());
                     logger.logChange(name + " rank promotion! to " + rank.getName(),name+id,this.toString());
                 }
             }
         }
+    }
+
+    @Override
+    public int getExcerciseIndex(Exercise exercise){
+        return exercises.indexOf(exercise);
     }
 
     @Override
@@ -91,6 +96,8 @@ abstract class abstractCourse implements Course{
                 '}';
     }
 
+
+
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
@@ -99,9 +106,11 @@ abstract class abstractCourse implements Course{
         observers.remove(observer);
     }
 
-    private void notifyObservers(String message) {
+    private void notifyObservers(String message,Exercise exercise) {
         for (Observer observer : observers) {
             observer.update(message);
+            System.out.println(exercise.getText());
+            observer.update(exercise ,0);
         }
     }
 }

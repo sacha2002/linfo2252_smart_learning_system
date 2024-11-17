@@ -9,25 +9,27 @@ import models.Exercises.Exercise;
 
 public class MainView {
 
-    private JFrame frame;
-    private JTextField answerField;
-    private JLabel premiumLabel;
-    private JLabel scoreLabel;
-    private JLabel rankLabel;
-    private JButton premiumButton;
-    private JButton activateCourseButton;
-    private JButton spanishButton;
-    private JButton frenchButton;
-    private JButton englishButton;
-    private JButton nextQuestionButton;
-    private JButton previousQuestionButton;
-    private List<JLabel> exercises = new ArrayList<>();
+    private final JFrame frame;
+    private final JTextField answerField;
+    private final JLabel premiumLabel;
+    private final JLabel scoreLabel;
+    private final JLabel rankLabel;
+    private final JButton premiumButton;
+    private final JButton activateCourseButton;
+    private final JButton spanishButton;
+    private final JButton frenchButton;
+    private final JButton englishButton;
+    private final JButton nextQuestionButton;
+    private final JButton previousQuestionButton;
+    private final JButton hintButton;
+
+    private final List<JLabel> exercises = new ArrayList<>();
     private int currentExerciseIndex = 0;
     private String course;
 
 
-    private RankLabelObserver rankLabelObserver;
-    private PremiumLabelObserver premiumLabelObserver;
+    private final RankLabelObserver rankLabelObserver;
+    private final PremiumLabelObserver premiumLabelObserver;
 
     public MainView() {
         // Configuration de la fenêtre principale
@@ -41,7 +43,7 @@ public class MainView {
         premiumLabel.setBounds(10, 10, 140, 30); // X=10, Y=10, Largeur=100, Hauteur=30
         frame.add(premiumLabel);
 
-        scoreLabel = new JLabel("Score : 0");
+        scoreLabel = new JLabel("Rank score : 0");
         scoreLabel.setBounds(490, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
         frame.add(scoreLabel);
 
@@ -49,7 +51,7 @@ public class MainView {
         rankLabel.setBounds(390, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
         frame.add(rankLabel);
 
-        rankLabelObserver = new RankLabelObserver(rankLabel);
+        rankLabelObserver = new RankLabelObserver(rankLabel,this);
         premiumLabelObserver = new PremiumLabelObserver(premiumLabel);
 
         answerField = new JTextField(20);
@@ -64,6 +66,10 @@ public class MainView {
         nextQuestionButton = new JButton(">");
         nextQuestionButton.setBounds(455, 250, 45, 30); // À droite de answerField
         frame.add(nextQuestionButton);
+
+        hintButton = new JButton("?");
+        hintButton.setBounds(500, 250, 45, 30); // À droite de next question
+        frame.add(hintButton);
 
         // Panel pour les boutons de langue et Premium en bas
         spanishButton = new JButton("Spanish");
@@ -91,9 +97,8 @@ public class MainView {
         frame.setVisible(true);
     }
 
-    public void displayExercise(Exercise exercise) {
+    public void displayExercise(Exercise exercise, int index) {
         String question = exercise.getText();
-        int id = exercise.getId();
         this.clearLabels();
         JLabel label1 = new JLabel(question, JLabel.CENTER);
         label1.setBounds(0, 150, 600, 30);
@@ -101,7 +106,7 @@ public class MainView {
         answerField.setBounds(150, 250, 300, 30);
         frame.add(answerField);
         exercises.add(label1);
-        currentExerciseIndex = id;
+        currentExerciseIndex = index;
         frame.repaint();
         frame.revalidate();
         answerField.requestFocusInWindow();
@@ -117,6 +122,10 @@ public class MainView {
     public void addChangeQuestionButtonListener(ActionListener listener){
         nextQuestionButton.addActionListener(listener);
         previousQuestionButton.addActionListener(listener);
+    }
+
+    public void addHintButtonListener(ActionListener listener){
+        hintButton.addActionListener(listener);
     }
 
     public void addPremiumButtonListener(ActionListener listener){
@@ -177,13 +186,13 @@ public class MainView {
     }
 
     public void updateRank(String rank){
-        rankLabel.setText("Rank : " + rank);
+        rankLabel.setText("Rank: " + rank);
         frame.repaint();
         frame.revalidate();
     }
 
     public void updateScore(int score) {
-        scoreLabel.setText("Score : " + score);
+        scoreLabel.setText("Rank score: " + score);
         frame.repaint();
         frame.revalidate();
     }

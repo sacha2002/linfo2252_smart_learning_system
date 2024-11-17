@@ -1,5 +1,6 @@
 package views;
 
+import models.Exercises.Exercise;
 import models.Observer;
 
 import javax.swing.*;
@@ -14,5 +15,10 @@ public class PremiumLabelObserver implements Observer {
     @Override
     public void update(String message) {
         premiumLabel.setText("Free mode: "+ message);
+    }
+
+    @Override
+    public void update(Exercise message, int index) {
+
     }
 }

@@ -126,6 +126,11 @@ public class ExerciseData {
         return allEnglishExercises;
     }
 
+    public static List<Exercise> getRankExercices(String course, String rank){
+        return exerciseLookup.get(course+rank);
+
+    }
+
 
     public static Map<String,List<Exercise>> getExerciseLookup(){
         return exerciseLookup;
