@@ -67,6 +67,7 @@ public class Controller implements ControllerInterface{
                         mv.getAnswerField().revalidate();
                         mv.getAnswerField().repaint();
                     }
+                    mv.displayHint("");
                 });
             }
         }
