@@ -27,13 +27,13 @@ public class Controller implements ControllerInterface{
                         if (isPremium) {
                             isPremium = false;
                             activate(new String[]{"PREMIUM"}, new String[]{});
-                            model.getEnergySystem().addObserver(mv.getPremiumLabelObserver());
+                            model.getEnergySystem().addObserver(mv.getTopPanel().getPremiumLabelObserver());
                             //initial state
                             mv.setPremiumLabel("Free Mode: "+ model.getEnergySystem().getCurrentEnergy()+"/"+model.getEnergySystem().getMaxEnergy());
                         } else {
                             isPremium = true;
                             activate(new String[]{}, new String[]{"PREMIUM"});
-                            model.getEnergySystem().removeObserver(mv.getPremiumLabelObserver());
+                            model.getEnergySystem().removeObserver(mv.getTopPanel().getPremiumLabelObserver());
                             mv.setPremiumLabel("Premium Mode");
                         }
 
@@ -47,27 +47,27 @@ public class Controller implements ControllerInterface{
 
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
-                    if (e.getSource() == mv.getSpanishButton()) {
+                    if (e.getSource() == mv.getBottomPanel().getSpanishButton()) {
                         course = "spanish";
-                    } else if (e.getSource() == mv.getFrenchButton()) {
+                    } else if (e.getSource() == mv.getBottomPanel().getFrenchButton()) {
                         course = "french";
-                    } else if (e.getSource() == mv.getEnglishButton()) {
+                    } else if (e.getSource() == mv.getBottomPanel().getEnglishButton()) {
                         course = "english";
                     }
                     mv.setCourse(course);
                     if(selectedCourse == null || !Objects.equals(course, selectedCourse.getName())){
                         selectedCourse = model.getCourse(course);
-                        selectedCourse.addObserver(mv.getRankLabelObserver());
+                        selectedCourse.addObserver(mv.getTopPanel().getRankLabelObserver());
                     }
 
                     if (selectedCourse != null && model.getCoursesList().contains(selectedCourse)) {
-                        Exercise current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
+                        Exercise current_exercice = selectedCourse.getExercises().get(mv.getMiddlePanel().getCurrentExerciseIndex());
                         mv.displayExercise(current_exercice,selectedCourse.getExcerciseIndex(current_exercice));
 
                         mv.updateRank(Rank.getRankByNumber(selectedCourse.getCourseRank()).getName());
                         mv.updateScore(selectedCourse.getCourseRank());
-                        mv.getAnswerField().revalidate();
-                        mv.getAnswerField().repaint();
+                        mv.getMiddlePanel().getAnswerField().revalidate();
+                        mv.getMiddlePanel().getAnswerField().repaint();
                     }
                 });
             }
@@ -79,11 +79,11 @@ public class Controller implements ControllerInterface{
 
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
-                    answer = mv.getAnswerField().getText();
+                    answer = mv.getMiddlePanel().getAnswerField().getText();
                     if( !model.practice()){
                             return;
                     }
-                    Exercise current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
+                    Exercise current_exercice = selectedCourse.getExercises().get(mv.getMiddlePanel().getCurrentExerciseIndex());
                     if (selectedCourse.practice(current_exercice,answer)) {
                         mv.updateScore(selectedCourse.getCourseRank());
                     }
@@ -95,7 +95,7 @@ public class Controller implements ControllerInterface{
 
         public void actionPerformed(ActionEvent e) {
             mv.ifPresent(mv -> {
-                Exercise current_exercice = selectedCourse.getExercises().get(mv.getCurrentExerciceIndex());
+                Exercise current_exercice = selectedCourse.getExercises().get(mv.getMiddlePanel().getCurrentExerciseIndex());
                 if (model.isPremium()) {
                     System.out.println(current_exercice.getHint());
                 }else{

@@ -10,7 +10,7 @@ public class TopPanel extends JPanel {
     private final RankLabelObserver rankLabelObserver;
     private final PremiumLabelObserver premiumLabelObserver;
 
-    public TopPanel() {
+    public TopPanel( MainView mv) {
         setLayout(new FlowLayout(FlowLayout.LEFT));
         premiumLabel = new JLabel("Premium Mode");
         scoreLabel = new JLabel("Rank score : 0");
@@ -18,7 +18,7 @@ public class TopPanel extends JPanel {
         add(premiumLabel);
         add(rankLabel);
         add(scoreLabel);
-        rankLabelObserver = new RankLabelObserver(rankLabel, this);
+        rankLabelObserver = new RankLabelObserver(rankLabel, mv);
         premiumLabelObserver = new PremiumLabelObserver(premiumLabel);
     }
 
@@ -50,6 +50,14 @@ public class TopPanel extends JPanel {
         premiumLabel.setText(text);
         repaint();
         revalidate();
+    }
+
+    public RankLabelObserver getRankLabelObserver() {
+        return rankLabelObserver;
+    }
+
+    public PremiumLabelObserver getPremiumLabelObserver() {
+        return premiumLabelObserver;
     }
 }
 

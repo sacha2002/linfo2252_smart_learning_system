@@ -13,6 +13,8 @@ public class MainView {
     private final MiddlePanel middlePanel;
     private final BottomPanel bottomPanel;
 
+    private String course;
+
     public MainView() {
         // Main frame setup
         frame = new JFrame("LEARNING APP");
@@ -21,7 +23,7 @@ public class MainView {
         frame.setLayout(new BorderLayout());
 
         // Panels
-        topPanel = new TopPanel();
+        topPanel = new TopPanel(this);
         middlePanel = new MiddlePanel();
         bottomPanel = new BottomPanel();
 
@@ -91,5 +93,12 @@ public class MainView {
 
     public BottomPanel getBottomPanel() {
         return bottomPanel;
+    }
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
     }
 }
