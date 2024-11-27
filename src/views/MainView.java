@@ -75,6 +75,14 @@ public class MainView {
         topPanel.updateScore(score);
     }
 
+    public void displayHint(String hint) {
+        middlePanel.updateHint(hint);
+    }
+
+    public void setHintTrue(){
+        middlePanel.setHintTrueFalse();
+    }
+
     public void setPremiumLabel(String text) {
         topPanel.setPremiumLabel(text);
     }
@@ -101,4 +109,9 @@ public class MainView {
     public void setCourse(String course) {
         this.course = course;
     }
+
+    public void displayMessageCorrectness(String message, boolean correct) {
+        middlePanel.displayMessage(message, correct);
+    }
+
 }

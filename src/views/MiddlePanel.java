@@ -12,7 +12,10 @@ public class MiddlePanel extends JPanel {
     private final JButton nextQuestionButton;
     private final JButton hintButton;
     private final List<JLabel> exercises = new ArrayList<>();
+    private JLabel hintLabel;
+    private JLabel messageLabel;
     private int currentExerciseIndex = 0;
+    private boolean hintIsActivated = false;
 
     public MiddlePanel() {
         setLayout(null); // Using absolute layout for flexibility
@@ -28,10 +31,18 @@ public class MiddlePanel extends JPanel {
         hintButton = new JButton("?");
         hintButton.setBounds(500, 250, 45, 30);
 
+        hintLabel = new JLabel("", JLabel.CENTER);
+        hintLabel.setBounds(0, 300, 600, 30);
+
+        messageLabel = new JLabel("", JLabel.CENTER);
+        messageLabel.setBounds(0, 200, 600, 30);
+
         add(answerField);
         add(previousQuestionButton);
         add(nextQuestionButton);
         add(hintButton);
+        add(hintLabel);
+        add(messageLabel);
     }
 
     public JTextField getAnswerField() {
@@ -49,6 +60,7 @@ public class MiddlePanel extends JPanel {
     public JButton getHintButton() {
         return hintButton;
     }
+
 
     public void displayExercise(Exercise exercise, int index) {
         clearLabels();
@@ -72,6 +84,39 @@ public class MiddlePanel extends JPanel {
 
     public int getCurrentExerciseIndex() {
         return currentExerciseIndex;
+    }
+
+    public void setHintTrueFalse() {
+        hintIsActivated = !hintIsActivated;
+    }
+    public void updateHint(String hint) {
+        if (hint == "")
+            hintIsActivated = false;
+        if (hintIsActivated) {
+            hintLabel.setText("hint : " + hint);
+
+        }
+        else {
+            hintLabel.setText("");
+        }
+        repaint();
+        revalidate();
+    }
+
+    public void displayMessage(String message, boolean correct) {
+        if (correct)
+            messageLabel.setForeground(java.awt.Color.GREEN);
+        else messageLabel.setForeground(java.awt.Color.RED);
+        messageLabel.setText(message);
+        repaint();
+        revalidate();
+        Timer timer = new Timer(3000, e -> {
+            messageLabel.setText("");
+            repaint();
+            revalidate();
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 }
 

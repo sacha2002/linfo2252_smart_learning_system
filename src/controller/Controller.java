@@ -81,12 +81,16 @@ public class Controller implements ControllerInterface{
                 mv.ifPresent(mv -> {
                     answer = mv.getMiddlePanel().getAnswerField().getText();
                     if( !model.practice()){
-                            return;
+                        mv.displayMessageCorrectness("You can't practice now ! Not enough energy", false);
+                        return;
                     }
                     Exercise current_exercice = selectedCourse.getExercises().get(mv.getMiddlePanel().getCurrentExerciseIndex());
                     if (selectedCourse.practice(current_exercice,answer)) {
+                        mv.displayMessageCorrectness("Correct ! Well done", true);
                         mv.updateScore(selectedCourse.getCourseRank());
                     }
+                    else
+                        mv.displayMessageCorrectness("Incorrect ! Try again", false);
                 });
             }
         }
@@ -95,11 +99,17 @@ public class Controller implements ControllerInterface{
 
         public void actionPerformed(ActionEvent e) {
             mv.ifPresent(mv -> {
+                if (selectedCourse == null) {
+                    return;
+                }
                 Exercise current_exercice = selectedCourse.getExercises().get(mv.getMiddlePanel().getCurrentExerciseIndex());
                 if (model.isPremium()) {
                     System.out.println(current_exercice.getHint());
+                    mv.setHintTrue();
+                    mv.displayHint(current_exercice.getHint());
                 }else{
                     System.out.println("Pay us for hint");
+                    mv.displayHint("Pay us for hint");
                 }
             });
         }
@@ -139,6 +149,7 @@ public class Controller implements ControllerInterface{
                             Course course = model.getCourse(mv.getCourse());
                             Exercise current_exercice = course.getExercises().get(index);
                             mv.displayExercise(current_exercice,course.getExcerciseIndex(current_exercice));
+                            mv.displayHint("");
                         }
                     } else if (e.getSource() == mv.getMiddlePanel().getNextQuestionButton()) {
                         Course course = model.getCourse(mv.getCourse());
@@ -147,6 +158,7 @@ public class Controller implements ControllerInterface{
                             index++;
                             Exercise current_exercice =course.getExercises().get(index);
                             mv.displayExercise(current_exercice,course.getExcerciseIndex(current_exercice));
+                            mv.displayHint("");
                         }
                     }
                     ;
