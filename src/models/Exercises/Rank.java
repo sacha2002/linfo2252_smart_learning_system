@@ -1,4 +1,4 @@
-package models;
+package models.Exercises;
 
 public enum Rank {
     BRONZE(0,499,"Bronze"),

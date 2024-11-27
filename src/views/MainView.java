@@ -1,7 +1,10 @@
 package views;
 
 import models.Exercises.Exercise;
-
+import views.panels.BottomPanel;
+import views.panels.MiddlePanel;
+import views.panels.TopPanel;
+import views.observers.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -67,13 +70,6 @@ public class MainView {
         middlePanel.displayExercise(exercise, index);
     }
 
-    public void updateRank(String rank) {
-        topPanel.updateRank(rank);
-    }
-
-    public void updateScore(int score) {
-        topPanel.updateScore(score);
-    }
 
     public void displayHint(String hint) {
         middlePanel.updateHint(hint);
@@ -83,25 +79,11 @@ public class MainView {
         middlePanel.setHintTrueFalse();
     }
 
-    public void setPremiumLabel(String text) {
-        topPanel.setPremiumLabel(text);
-    }
 
     public void closeWindow() {
         frame.dispose();
     }
 
-    public TopPanel getTopPanel() {
-        return topPanel;
-    }
-
-    public MiddlePanel getMiddlePanel() {
-        return middlePanel;
-    }
-
-    public BottomPanel getBottomPanel() {
-        return bottomPanel;
-    }
     public String getCourse() {
         return course;
     }
@@ -113,5 +95,55 @@ public class MainView {
     public void displayMessageCorrectness(String message, boolean correct) {
         middlePanel.displayMessage(message, correct);
     }
+
+    public int getCurrentExerciseIndex(){
+        return middlePanel.getCurrentExerciseIndex();
+    }
+
+    public JTextField getAnswerField(){
+        return middlePanel.getAnswerField();
+    }
+
+    public  RankLabelObserver getRankLabelObserver(){
+        return topPanel.getRankLabelObserver();
+    }
+
+    public  PremiumLabelObserver getPremiumLabelObserver(){
+        return topPanel.getPremiumLabelObserver();
+    }
+
+    public  StreakLabelObserver getStreakLabelObserver(){
+        return topPanel.getStreakLabelObserver();
+    }
+
+    public  ScoreLabelObserver getScoreLabelObserver(){
+        return topPanel.getScoreLabelObserver();
+    }
+
+    public JButton getPremiumButton(){
+        return bottomPanel.getPremiumButton();
+    }
+
+    public JButton getSpanishButton(){
+        return bottomPanel.getSpanishButton();
+    }
+
+    public JButton getEnglishButton(){
+        return bottomPanel.getEnglishButton();
+    }
+    public JButton getFrenchButton(){
+        return bottomPanel.getFrenchButton();
+    }
+    public JButton getActivateCourseButton(){
+        return bottomPanel.getActivateCourseButton();
+    }
+    public JButton getPreviousQuestionButton(){
+        return middlePanel.getPreviousQuestionButton();
+    }
+    public JButton getNextQuestionButton(){
+        return middlePanel.getNextQuestionButton();
+    }
+
+
 
 }

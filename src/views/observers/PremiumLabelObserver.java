@@ -1,20 +1,23 @@
-package views;
+package views.observers;
 
 import models.Exercises.Exercise;
-import models.Observer;
 
 import javax.swing.*;
 
 public class PremiumLabelObserver implements Observer {
-    private JLabel premiumLabel;
+    private final JLabel premiumLabel;
+    private final JPanel panel;
 
-    public PremiumLabelObserver(JLabel premiumLabel) {
+    public PremiumLabelObserver(JLabel premiumLabel, JPanel panel) {
         this.premiumLabel = premiumLabel;
+        this.panel = panel;
     }
 
     @Override
     public void update(String message) {
-        premiumLabel.setText("Free mode: "+ message);
+        premiumLabel.setText( message);
+        panel.repaint();
+        panel.revalidate();
     }
 
     @Override

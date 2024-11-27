@@ -1,7 +1,5 @@
 package models.Exercises;
 
-import models.Rank;
-
 public class ListeningExercise extends Exercise {
     private String audioFilePath;
 

@@ -11,7 +11,6 @@ import models.features.FeatureCommand;
 import models.features.PremiumCommand;
 
 
-import java.time.LocalDate;
 import java.util.*;
 
 public class Model {
@@ -20,27 +19,22 @@ public class Model {
 
      private final List<Course> coursesList = new ArrayList<>();
      private final List<String> availableCourses =  new ArrayList<>();
-     private String username;
+     private final String username;
 
-     private int streak;
-     private LocalDate lastPracticeDate;
+     private final Streak streak;
 
+    private final EnergySystem energySystem;
 
-    private EnergySystem energySystem;
-
-    private Set<FeatureCommand> activeFeatures = new HashSet<>();
+    private final Set<FeatureCommand> activeFeatures = new HashSet<>();
 
     public Model(String username, int streak) {
         this.username = username;
-        this.streak = streak;
+        this.streak = new Streak(streak);
         this.energySystem = new EnergySystem(false);
         //all rank in silver just for demo
         coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
         coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
         coursesList.add(new English(998, ExerciseData.getEnglishSilverExercises()));
-        //coursesList.add(new Spanish(650, ExerciseData.getAllSpanishExercices()));
-        //coursesList.add(new English(650, ExerciseData.getAllEnglishExercices()));
-        //coursesList.add(new French(650, ExerciseData.getAllFrenchExercices()));
         //init features
         activeFeatures.add(new CoursesCommand(this));
         activeFeatures.add(new PremiumCommand(this));
@@ -50,9 +44,9 @@ public class Model {
 
 
     public boolean practice() {
-       // energySystem.rechargeEnergy();
         if (energySystem.canPractice()) {
             energySystem.useEnergy();
+            streak.updateStreak();
             logger.logChange(username + " practiced! Current energy: " + energySystem.getCurrentEnergy(), username, this.toString());
             return true;
         } else {
@@ -98,24 +92,6 @@ public class Model {
     }
 
 
-    public int getStreak() {
-        return streak;
-    }
-
-
-    private void updateStreak() {
-        LocalDate today = LocalDate.now();
-
-        if (lastPracticeDate.equals(today.minusDays(1))) {
-            streak++; // Extend the streak
-        } else if (!lastPracticeDate.equals(today)) {
-            streak = 0;
-        }
-
-        lastPracticeDate = today; // Update last practice date
-        logger.logChange(username + " streak updated to: " + streak, username, this.toString());
-    }
-
 
     //if it cant practice, no course is given( as second measure)
     public Course getCourse(String courseName){
@@ -149,8 +125,8 @@ public class Model {
         logger.logChange(username + " " + premiumMessage, username, this.toString());
     }
 
-    public boolean isPremium(){
-        return energySystem.isPremium();
+    public Streak getStreak() {
+        return streak;
     }
 
     @Override

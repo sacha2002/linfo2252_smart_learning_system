@@ -1,7 +1,7 @@
 package models.courses;
 
 import models.Exercises.Exercise;
-import models.Observer;
+import views.observers.Observer;
 
 import java.util.List;
 
@@ -11,8 +11,9 @@ public interface Course {
     List<Exercise> getExercises();
     String toString();
     int getId();
-    boolean practice( Exercise exercise,String userAnswer);
-    void addObserver(Observer observer);
-    void removeObserver(Observer observer);
     int getExcerciseIndex(Exercise exercise);
+    boolean practice( Exercise exercise,String userAnswer);
+    void addRankObserver(Observer observer) ;
+    void addScoreObserver(Observer observer);
+
 }

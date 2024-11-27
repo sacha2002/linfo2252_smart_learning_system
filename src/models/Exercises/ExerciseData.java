@@ -1,7 +1,5 @@
 package models.Exercises;
 
-import models.Rank;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,14 +13,20 @@ public class ExerciseData {
     private static final List<Exercise> englishBronzeExercises = new ArrayList<>();
     private static final List<Exercise> englishSilverExercises = new ArrayList<>();
     private static final List<Exercise> englishGoldExercises = new ArrayList<>();
+    private static final List<Exercise> englishPlatinumExercises = new ArrayList<>();
+    private static final List<Exercise> englishDiamondExercises = new ArrayList<>();
 
     private static final List<Exercise> spanishBronzeExercises = new ArrayList<>();
     private static final List<Exercise> spanishSilverExercises = new ArrayList<>();
     private static final List<Exercise> spanishGoldExercises = new ArrayList<>();
+    private static final List<Exercise> spanishPlatinumExercises = new ArrayList<>();
+    private static final List<Exercise> spanishDiamondExercises = new ArrayList<>();
 
     private static final List<Exercise> frenchBronzeExercises = new ArrayList<>();
     private static final List<Exercise> frenchSilverExercises = new ArrayList<>();
     private static final List<Exercise> frenchGoldExercises = new ArrayList<>();
+    private static final List<Exercise> frenchPlatinumExercises = new ArrayList<>();
+    private static final List<Exercise> frenchDiamondExercises = new ArrayList<>();
 
     static {
         // English Exercises
@@ -38,6 +42,14 @@ public class ExerciseData {
         englishGoldExercises.add(new GrammarExercise("Correct the sentence: 'They goes to school every day.'", Rank.GOLD, "go", "Check the subject-verb agreement."));
         exerciseLookup.putIfAbsent("englishGold",englishGoldExercises);
 
+        englishPlatinumExercises.add(new GrammarExercise("slang for sausage", Rank.PLATINUM, "glizzy", "meme word"));
+        englishPlatinumExercises.add(new GrammarExercise("Transform this sentence into passive voice: 'They completed the project on time.'", Rank.PLATINUM, "The project was completed on time.", "Focus on the verb structure."));
+        exerciseLookup.putIfAbsent("englishPlatinum", englishPlatinumExercises);
+
+        englishDiamondExercises.add(new GrammarExercise("whats updog?", Rank.DIAMOND, "the ceiling", "whats up"));
+        englishDiamondExercises.add(new ListeningExercise("Listen to the audio and summarize the main idea.", Rank.DIAMOND, "Main idea summary", "Pay attention to details.", "path/to/english/diamond_audio1.mp3"));
+        exerciseLookup.putIfAbsent("englishDiamond", englishDiamondExercises);
+
         // Spanish Exercises
         spanishBronzeExercises.add(new GrammarExercise("¿Cuál es el pasado del verbo 'ir'?", Rank.BRONZE, "fue", "Es un verbo irregular."));
         spanishBronzeExercises.add(new GrammarExercise("Completa la frase: 'Nosotros ___ (vivir) en Madrid.'", Rank.BRONZE, "vivimos", "Piensa en el presente."));
@@ -51,6 +63,14 @@ public class ExerciseData {
         spanishGoldExercises.add(new GrammarExercise("Corrige la frase: 'Ellos come pizza todos los días.'", Rank.GOLD, "comen", "Revisa el acuerdo sujeto-verbo."));
         exerciseLookup.putIfAbsent("spanishGold",spanishGoldExercises);
 
+        spanishPlatinumExercises.add(new GrammarExercise("Reescribe esta oración en voz pasiva: 'Ellos construyeron el edificio en un año.'", Rank.PLATINUM, "El edificio fue construido en un año.", "Céntrate en la estructura del verbo."));
+        spanishPlatinumExercises.add(new GrammarExercise("Quien es el mas grande??", Rank.PLATINUM, "BOCA", "la mitad mas uno"));
+        exerciseLookup.putIfAbsent("spanishPlatinum", spanishPlatinumExercises);
+
+        spanishDiamondExercises.add(new GrammarExercise("quien gambeteo a 4 ingleses?", Rank.DIAMOND, "maradona", "la mano de dios"));
+        spanishDiamondExercises.add(new ListeningExercise("Escucha el audio y resume la idea principal.", Rank.DIAMOND, "Resumen de la idea principal", "Presta atención a los detalles.", "path/to/spanish/diamond_audio1.mp3"));
+        exerciseLookup.putIfAbsent("spanishDiamond", spanishDiamondExercises);
+
         // French Exercises
         frenchBronzeExercises.add(new GrammarExercise("Quel est le passé du verbe 'aller'?", Rank.BRONZE, "est allé", "C'est un verbe irrégulier."));
         frenchBronzeExercises.add(new GrammarExercise("Complétez la phrase: 'Nous ___ (être) en France.'", Rank.BRONZE, "sommes", "Pensez au présent."));
@@ -63,6 +83,14 @@ public class ExerciseData {
         frenchGoldExercises.add(new GrammarExercise("Trouvez l'erreur dans cette phrase: 'Il n'aime pas la glace.'", Rank.GOLD, "n'aime pas", "Pensez à l'accord sujet-verbe."));
         frenchGoldExercises.add(new GrammarExercise("Corrigez la phrase: 'Ils mange une pizza chaque jour.'", Rank.GOLD, "mangent", "Vérifiez l'accord sujet-verbe."));
         exerciseLookup.putIfAbsent("frenchGold",frenchGoldExercises);
+
+        frenchPlatinumExercises.add(new GrammarExercise("Complétez la phrase: 'Nous ___ (être) en France.'", Rank.PLATINUM, "sommes", "Pensez au présent."));
+        frenchPlatinumExercises.add(new GrammarExercise("Transformez cette phrase en voix passive : 'Ils ont terminé le projet à temps.'", Rank.PLATINUM, "Le projet a été terminé à temps.", "Concentrez-vous sur la structure verbale."));
+        exerciseLookup.putIfAbsent("frenchPlatinum", frenchPlatinumExercises);
+
+        frenchDiamondExercises.add(new ListeningExercise("Écoutez: 'Aimeriez-vous aller au cinéma?' et répondez: Quelle question est posée?", Rank.DIAMOND, "Aimeriez-vous aller au cinéma?", "Écoutez l'intonation.", "path/to/french/audio2.mp3"));
+        frenchDiamondExercises.add(new ListeningExercise("Écoutez l'audio et résumez l'idée principale.", Rank.DIAMOND, "Résumé de l'idée principale", "Faites attention aux détails.", "path/to/french/diamond_audio1.mp3"));
+        exerciseLookup.putIfAbsent("frenchDiamond", frenchDiamondExercises);
     }
 
     // Getters for Exercises by Language and Rank
@@ -102,28 +130,34 @@ public class ExerciseData {
         return new ArrayList<>(frenchGoldExercises);
     }
 
-    public static List<Exercise> getAllSpanishExercices(){
-        List<Exercise> allSpanishExercises = new ArrayList<>();
-        allSpanishExercises.addAll(spanishBronzeExercises);
-        allSpanishExercises.addAll(spanishSilverExercises);
-        allSpanishExercises.addAll(spanishGoldExercises);
-        return allSpanishExercises;
-    }
-
-    public static List<Exercise> getAllFrenchExercices(){
-        List<Exercise> allFrenchExercises = new ArrayList<>();
-        allFrenchExercises.addAll(frenchBronzeExercises);
-        allFrenchExercises.addAll(frenchSilverExercises);
-        allFrenchExercises.addAll(frenchGoldExercises);
-        return allFrenchExercises;
-    }
-
-    public static List<Exercise> getAllEnglishExercices(){
+    public static List<Exercise> getAllEnglishExercises() {
         List<Exercise> allEnglishExercises = new ArrayList<>();
         allEnglishExercises.addAll(englishBronzeExercises);
         allEnglishExercises.addAll(englishSilverExercises);
         allEnglishExercises.addAll(englishGoldExercises);
+        allEnglishExercises.addAll(englishPlatinumExercises);
+        allEnglishExercises.addAll(englishDiamondExercises);
         return allEnglishExercises;
+    }
+
+    public static List<Exercise> getAllSpanishExercises() {
+        List<Exercise> allSpanishExercises = new ArrayList<>();
+        allSpanishExercises.addAll(spanishBronzeExercises);
+        allSpanishExercises.addAll(spanishSilverExercises);
+        allSpanishExercises.addAll(spanishGoldExercises);
+        allSpanishExercises.addAll(spanishPlatinumExercises);
+        allSpanishExercises.addAll(spanishDiamondExercises);
+        return allSpanishExercises;
+    }
+
+    public static List<Exercise> getAllFrenchExercises() {
+        List<Exercise> allFrenchExercises = new ArrayList<>();
+        allFrenchExercises.addAll(frenchBronzeExercises);
+        allFrenchExercises.addAll(frenchSilverExercises);
+        allFrenchExercises.addAll(frenchGoldExercises);
+        allFrenchExercises.addAll(frenchPlatinumExercises);
+        allFrenchExercises.addAll(frenchDiamondExercises);
+        return allFrenchExercises;
     }
 
     public static List<Exercise> getRankExercices(String course, String rank){

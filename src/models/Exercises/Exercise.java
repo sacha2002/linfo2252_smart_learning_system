@@ -1,7 +1,6 @@
 package models.Exercises;
 
 import models.Logger;
-import models.Rank;
 
 import java.util.Objects;
 

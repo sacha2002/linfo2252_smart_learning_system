@@ -1,4 +1,4 @@
-package models;
+package views.observers;
 
 import models.Exercises.Exercise;
 

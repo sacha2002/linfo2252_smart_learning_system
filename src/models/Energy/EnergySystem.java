@@ -1,6 +1,6 @@
 package models.Energy;
 
-import models.Observer;
+import views.observers.Observer;
 
 import javax.swing.*;
 import java.time.Duration;
@@ -34,7 +34,7 @@ public class EnergySystem{
         if( isPremium)
             return;
         currentEnergy--;
-        notifyObservers( currentEnergy +"/"+ MAX_ENERGY);
+        notifyObservers("Free Mode: "+ currentEnergy +"/"+ MAX_ENERGY);
     }
 
     public int getMaxEnergy() {
@@ -47,7 +47,7 @@ public class EnergySystem{
             return true;
         boolean canPractice = currentEnergy > 0;
         String message = canPractice? "" : "Wait for energy to recharge";
-        notifyObservers(message);
+        notifyObservers("Free Mode: "+ message);
         return canPractice;
     }
 
@@ -62,7 +62,7 @@ public class EnergySystem{
         if(energyToRecharge>0){
             currentEnergy+=  Math.min(energyToRecharge, MAX_ENERGY);
             lastRechargeTime = now;
-            notifyObservers( currentEnergy +"/"+ MAX_ENERGY);
+            notifyObservers("Free Mode: "+ currentEnergy +"/"+ MAX_ENERGY);
         }
 
     }
@@ -84,16 +84,20 @@ public class EnergySystem{
     }
 
     public void addObserver(Observer observer) {
+        System.out.println("TETAS");
         observers.add(observer);
+        notifyObservers("Free Mode: " + currentEnergy +"/"+ MAX_ENERGY);
     }
 
     public void removeObserver(Observer observer) {
+        notifyObservers("Premium Mode");
         observers.remove(observer);
     }
 
     private void notifyObservers(String message) {
         for (Observer observer : observers) {
             observer.update(message);
+            System.out.println("HOLLSS");
         }
     }
 
