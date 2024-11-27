@@ -1,218 +1,95 @@
 package views;
 
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.*;
-
 import models.Exercises.Exercise;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class MainView {
 
     private final JFrame frame;
-    private final JTextField answerField;
-    private final JLabel premiumLabel;
-    private final JLabel scoreLabel;
-    private final JLabel rankLabel;
-    private final JButton premiumButton;
-    private final JButton activateCourseButton;
-    private final JButton spanishButton;
-    private final JButton frenchButton;
-    private final JButton englishButton;
-    private final JButton nextQuestionButton;
-    private final JButton previousQuestionButton;
-    private final JButton hintButton;
-
-    private final List<JLabel> exercises = new ArrayList<>();
-    private int currentExerciseIndex = 0;
-    private String course;
-
-
-    private final RankLabelObserver rankLabelObserver;
-    private final PremiumLabelObserver premiumLabelObserver;
+    private final TopPanel topPanel;
+    private final MiddlePanel middlePanel;
+    private final BottomPanel bottomPanel;
 
     public MainView() {
-        // Configuration de la fenêtre principale
+        // Main frame setup
         frame = new JFrame("LEARNING APP");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 600);
-        frame.setLayout(null); // Positionnement absolu
+        frame.setLayout(new BorderLayout());
 
-        // Labels en haut
-        premiumLabel = new JLabel("Premium Mode");
-        premiumLabel.setBounds(10, 10, 140, 30); // X=10, Y=10, Largeur=100, Hauteur=30
-        frame.add(premiumLabel);
+        // Panels
+        topPanel = new TopPanel();
+        middlePanel = new MiddlePanel();
+        bottomPanel = new BottomPanel();
 
-        scoreLabel = new JLabel("Rank score : 0");
-        scoreLabel.setBounds(490, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
-        frame.add(scoreLabel);
+        frame.add(topPanel, BorderLayout.NORTH);
+        frame.add(middlePanel, BorderLayout.CENTER);
+        frame.add(bottomPanel, BorderLayout.SOUTH);
 
-        rankLabel = new JLabel("Rank : None");
-        rankLabel.setBounds(390, 10, 100, 30); // X=490, Y=10, Largeur=100, Hauteur=30
-        frame.add(rankLabel);
-
-        rankLabelObserver = new RankLabelObserver(rankLabel,this);
-        premiumLabelObserver = new PremiumLabelObserver(premiumLabel);
-
-        answerField = new JTextField(20);
-        answerField.setBounds(150, 250, 300, 30); // X=150, Y=250, Largeur=300, Hauteur=30
-        frame.add(answerField);
-
-        // Boutons < et > de chaque côté du champ de réponse
-        previousQuestionButton = new JButton("<");
-        previousQuestionButton.setBounds(100, 250, 45, 30); // À gauche de answerField
-        frame.add(previousQuestionButton);
-
-        nextQuestionButton = new JButton(">");
-        nextQuestionButton.setBounds(455, 250, 45, 30); // À droite de answerField
-        frame.add(nextQuestionButton);
-
-        hintButton = new JButton("?");
-        hintButton.setBounds(500, 250, 45, 30); // À droite de next question
-        frame.add(hintButton);
-
-        // Panel pour les boutons de langue et Premium en bas
-        spanishButton = new JButton("Spanish");
-        spanishButton.setBounds(50, 500, 100, 30); // Position en bas à gauche
-        frame.add(spanishButton);
-
-        frenchButton = new JButton("French");
-        frenchButton.setBounds(175, 500, 100, 30);
-        frame.add(frenchButton);
-
-        englishButton = new JButton("English");
-        englishButton.setBounds(300, 500, 100, 30);
-        frame.add(englishButton);
-
-        premiumButton = new JButton("Premium");
-        premiumButton.setBounds(425, 500, 100, 30); // Position en bas à droite
-        frame.add(premiumButton);
-
-        activateCourseButton = new JButton("Activate Course");
-        activateCourseButton.setBounds(425, 450, 150, 30);
-        frame.add(activateCourseButton);
-
-
+        // Finalize frame setup
         frame.setFocusable(true);
         frame.setVisible(true);
     }
 
-    public void displayExercise(Exercise exercise, int index) {
-        String question = exercise.getText();
-        this.clearLabels();
-        JLabel label1 = new JLabel(question, JLabel.CENTER);
-        label1.setBounds(0, 150, 600, 30);
-        frame.add(label1);
-        answerField.setBounds(150, 250, 300, 30);
-        frame.add(answerField);
-        exercises.add(label1);
-        currentExerciseIndex = index;
-        frame.repaint();
-        frame.revalidate();
-        answerField.requestFocusInWindow();
-    }
-
-
     public void addCourseButtonListener(ActionListener listener) {
-        spanishButton.addActionListener(listener);
-        frenchButton.addActionListener(listener);
-        englishButton.addActionListener(listener);
+        bottomPanel.getSpanishButton().addActionListener(listener);
+        bottomPanel.getFrenchButton().addActionListener(listener);
+        bottomPanel.getEnglishButton().addActionListener(listener);
     }
 
-    public void addChangeQuestionButtonListener(ActionListener listener){
-        nextQuestionButton.addActionListener(listener);
-        previousQuestionButton.addActionListener(listener);
+    public void addChangeQuestionButtonListener(ActionListener listener) {
+        middlePanel.getNextQuestionButton().addActionListener(listener);
+        middlePanel.getPreviousQuestionButton().addActionListener(listener);
     }
 
-    public void addHintButtonListener(ActionListener listener){
-        hintButton.addActionListener(listener);
+    public void addHintButtonListener(ActionListener listener) {
+        middlePanel.getHintButton().addActionListener(listener);
     }
 
-    public void addPremiumButtonListener(ActionListener listener){
-        premiumButton.addActionListener(listener);
+    public void addPremiumButtonListener(ActionListener listener) {
+        bottomPanel.getPremiumButton().addActionListener(listener);
     }
 
-    public void addTextfieldListener(ActionListener listener){
-        answerField.addActionListener(listener);
-    }
-    public void addActivateCourseButtonListener(ActionListener listener){
-        activateCourseButton.addActionListener(listener);
+    public void addTextfieldListener(ActionListener listener) {
+        middlePanel.getAnswerField().addActionListener(listener);
     }
 
-    public JButton getEnglishButton(){
-        return englishButton;
-    }
-    public JButton getFrenchButton(){
-        return frenchButton;
-    }
-    public JButton getSpanishButton(){
-        return spanishButton;
-    }
-    public JTextField getAnswerField(){
-        return answerField;
+    public void addActivateCourseButtonListener(ActionListener listener) {
+        bottomPanel.getActivateCourseButton().addActionListener(listener);
     }
 
-    public JButton getPreviousQuestionButton() {
-        return previousQuestionButton;
+    public void displayExercise(Exercise exercise, int index) {
+        middlePanel.displayExercise(exercise, index);
     }
 
-    public JButton getNextQuestionButton() {
-        return nextQuestionButton;
-    }
-
-    public JButton getPremiumButton(){
-        return premiumButton;
-    }
-
-    public JButton getActivateCourseButton(){
-        return activateCourseButton;
-    }
-    public int getCurrentExerciceIndex() {
-        return currentExerciseIndex;
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public void setPremiumLabel(String text){
-        premiumLabel.setText(text);
-        frame.repaint();
-        frame.revalidate();
-    }
-
-    public void updateRank(String rank){
-        rankLabel.setText("Rank: " + rank);
-        frame.repaint();
-        frame.revalidate();
+    public void updateRank(String rank) {
+        topPanel.updateRank(rank);
     }
 
     public void updateScore(int score) {
-        scoreLabel.setText("Rank score: " + score);
-        frame.repaint();
-        frame.revalidate();
+        topPanel.updateScore(score);
     }
 
-    public void clearLabels() {
-        for (JLabel label : exercises) {
-            frame.remove(label);
-        }
+    public void setPremiumLabel(String text) {
+        topPanel.setPremiumLabel(text);
     }
 
     public void closeWindow() {
         frame.dispose();
     }
 
-
-    public PremiumLabelObserver getPremiumLabelObserver() {
-        return premiumLabelObserver;
+    public TopPanel getTopPanel() {
+        return topPanel;
     }
 
-    public RankLabelObserver getRankLabelObserver() {
-        return rankLabelObserver;
+    public MiddlePanel getMiddlePanel() {
+        return middlePanel;
+    }
+
+    public BottomPanel getBottomPanel() {
+        return bottomPanel;
     }
 }

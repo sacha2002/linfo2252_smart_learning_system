@@ -10,6 +10,7 @@ import java.util.List;
 
 
 public class EnergySystem{
+
     private static final int MAX_ENERGY = 30;
     private int currentEnergy = MAX_ENERGY;
     private LocalDateTime lastRechargeTime = LocalDateTime.now();
@@ -95,4 +96,6 @@ public class EnergySystem{
             observer.update(message);
         }
     }
+
+
 }

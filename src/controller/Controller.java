@@ -19,13 +19,11 @@ public class Controller implements ControllerInterface{
     private Course selectedCourse;
 
 
-
-
         public class passToPremium implements ActionListener {
             private boolean isPremium = true;
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
-                    if (e.getSource() == mv.getPremiumButton()) {
+                    if (e.getSource() == mv.getBottomPanel().getPremiumButton()) {
                         if (isPremium) {
                             isPremium = false;
                             activate(new String[]{"PREMIUM"}, new String[]{});
@@ -111,7 +109,7 @@ public class Controller implements ControllerInterface{
             private boolean isActivated = false;
             public void actionPerformed(ActionEvent e) {
                 mv.ifPresent(mv -> {
-                    if (e.getSource() == mv.getActivateCourseButton()) {
+                    if (e.getSource() == mv.getBottomPanel().getActivateCourseButton()) {
                         if (isActivated) {
                             isActivated = false;
                             activate(new String[]{"COURSES"}, new String[]{});
@@ -132,9 +130,9 @@ public class Controller implements ControllerInterface{
                     if (!model.getAvailableCourses().contains(mv.getCourse())) {
                         return;
                     }
-                    int index = mv.getCurrentExerciceIndex();
+                    int index = mv.getMiddlePanel().getCurrentExerciseIndex();
 
-                    if (e.getSource() == mv.getPreviousQuestionButton()) {
+                    if (e.getSource() == mv.getMiddlePanel().getPreviousQuestionButton()) {
                         if (index > 0) {
                             index--;
 
@@ -142,7 +140,7 @@ public class Controller implements ControllerInterface{
                             Exercise current_exercice = course.getExercises().get(index);
                             mv.displayExercise(current_exercice,course.getExcerciseIndex(current_exercice));
                         }
-                    } else if (e.getSource() == mv.getNextQuestionButton()) {
+                    } else if (e.getSource() == mv.getMiddlePanel().getNextQuestionButton()) {
                         Course course = model.getCourse(mv.getCourse());
 
                         if (course != null && index < course.getExercises().size() - 1) {
