@@ -4,15 +4,13 @@ import models.Model;
 
 public class PremiumCommand implements FeatureCommand{
     private final Model target;
-    private final String name;
 
     public PremiumCommand(Model target) {
         this.target = target;
-        name="PREMIUM";
     }
     @Override
     public String getName() {
-        return name;
+        return "PREMIUM";
     }
 
     @Override

@@ -7,6 +7,7 @@ import models.Exercises.Rank;
 import models.courses.Course;
 import views.MainView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -14,7 +15,6 @@ import java.util.*;
 public class Controller implements ControllerInterface{
 
 
-    private Course selectedCourse;
 
 
         public class passToPremium implements ActionListener {
@@ -40,77 +40,7 @@ public class Controller implements ControllerInterface{
             }
         }
 
-        public class chooseCourse implements ActionListener {
-            static String course = "";
 
-            public void actionPerformed(ActionEvent e) {
-                mv.ifPresent(mv -> {
-                    if (e.getSource() == mv.getSpanishButton()) {
-                        course = "spanish";
-                    } else if (e.getSource() == mv.getFrenchButton()) {
-                        course = "french";
-                    } else if (e.getSource() == mv.getEnglishButton()) {
-                        course = "english";
-                    }
-                    mv.setCourse(course);
-                    if(selectedCourse == null || !Objects.equals(course, selectedCourse.getName())){
-                        selectedCourse = model.getCourse(course);
-                        selectedCourse.addRankObserver(mv.getRankLabelObserver());
-
-                        selectedCourse.addScoreObserver(mv.getScoreLabelObserver());
-                    }
-
-                    if (selectedCourse != null && model.getCoursesList().contains(selectedCourse)) {
-                        Exercise currentExercice = selectedCourse.getExercises().get(mv.getCurrentExerciseIndex());
-                        mv.displayExercise(currentExercice,selectedCourse.getExcerciseIndex(currentExercice));
-
-                        mv.getAnswerField().revalidate();
-                        mv.getAnswerField().repaint();
-                    }
-                });
-            }
-        }
-
-        public class enterAnswer implements ActionListener {
-
-            static String answer = "";
-
-            public void actionPerformed(ActionEvent e) {
-                mv.ifPresent(mv -> {
-                    answer = mv.getAnswerField().getText();
-                    if( !model.practice()){
-                        mv.displayMessageCorrectness("You can't practice now ! Not enough energy", false);
-                        return;
-                    }
-                    Exercise currentExercice = selectedCourse.getExercises().get(mv.getCurrentExerciseIndex());
-                    if (selectedCourse.practice(currentExercice,answer)) {
-                        mv.displayMessageCorrectness("Correct ! Well done", true);
-                    }
-                    else
-                        mv.displayMessageCorrectness("Incorrect ! Try again", false);
-                });
-            }
-        }
-
-    public class getHint implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-            mv.ifPresent(mv -> {
-                if (selectedCourse == null) {
-                    return;
-                }
-                Exercise currentExercice = selectedCourse.getExercises().get(mv.getCurrentExerciseIndex());
-                if (model.getEnergySystem().isPremium()) {
-                    System.out.println(currentExercice.getHint());
-                    mv.setHintTrue();
-                    mv.displayHint(currentExercice.getHint());
-                }else{
-                    System.out.println("Pay us for hint");
-                    mv.displayHint("Pay us for hint");
-                }
-            });
-        }
-    }
 
         public class activateCourse implements ActionListener {
             private boolean isActivated = false;
@@ -189,9 +119,9 @@ public class Controller implements ControllerInterface{
         @Override
         public boolean enableUIView() {
             mv = Optional.of(new MainView());
-            mv.get().addCourseButtonListener(new chooseCourse());
-            mv.get().addTextfieldListener(new enterAnswer());
-            mv.get().addHintButtonListener( new getHint());
+            mv.get().addCourseButtonListener(new ChooseCourse(mv,model));
+            mv.get().addTextfieldListener(new EnterAnswer(mv,model));
+            mv.get().addHintButtonListener( new GetHint(mv,model));
             mv.get().addChangeQuestionButtonListener(new changeQuestion());
             mv.get().addPremiumButtonListener(new passToPremium());
             mv.get().addActivateCourseButtonListener(new activateCourse());

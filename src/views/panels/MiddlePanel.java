@@ -89,8 +89,9 @@ public class MiddlePanel extends JPanel {
     public void setHintTrueFalse() {
         hintIsActivated = !hintIsActivated;
     }
+
     public void updateHint(String hint) {
-        if (hint == "")
+        if (hint.equals(""))
             hintIsActivated = false;
         if (hintIsActivated) {
             hintLabel.setText("hint : " + hint);

@@ -72,6 +72,7 @@ public class MainView {
 
 
     public void displayHint(String hint) {
+        setHintTrue();
         middlePanel.updateHint(hint);
     }
 

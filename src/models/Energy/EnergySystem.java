@@ -15,13 +15,12 @@ public class EnergySystem{
     private int currentEnergy = MAX_ENERGY;
     private LocalDateTime lastRechargeTime = LocalDateTime.now();
     private static final Duration RECHARGE_INTERVAL = Duration.ofMinutes(1);
-    private boolean isPremium;
+
     private Timer energyTimer;
 
     private final List<Observer> observers = new ArrayList<>();
 
-    public EnergySystem(boolean isPremium) {
-        this.isPremium = isPremium;
+    public EnergySystem() {
         startEnergyTimer();
     }
 
@@ -30,7 +29,7 @@ public class EnergySystem{
     }
 
 
-    public void useEnergy() {
+    public void useEnergy(boolean isPremium) {
         if( isPremium)
             return;
         currentEnergy--;
@@ -42,7 +41,7 @@ public class EnergySystem{
     }
 
 
-    public boolean canPractice() {
+    public boolean canPractice(boolean isPremium) {
         if(isPremium)
             return true;
         boolean canPractice = currentEnergy > 0;
@@ -74,17 +73,13 @@ public class EnergySystem{
         energyTimer.start();
     }
 
-    public boolean isPremium() {
-        return isPremium;
-    }
 
-    public void setPremium(boolean premium) {
-        isPremium = premium;
+
+    public void setPremium() {
         currentEnergy= MAX_ENERGY;
     }
 
     public void addObserver(Observer observer) {
-        System.out.println("TETAS");
         observers.add(observer);
         notifyObservers("Free Mode: " + currentEnergy +"/"+ MAX_ENERGY);
     }
@@ -97,7 +92,6 @@ public class EnergySystem{
     private void notifyObservers(String message) {
         for (Observer observer : observers) {
             observer.update(message);
-            System.out.println("HOLLSS");
         }
     }
 
