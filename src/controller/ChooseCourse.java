@@ -23,9 +23,9 @@ public class ChooseCourse implements ActionListener {
 
     private Course selectedCourse;
 
-    public ChooseCourse(Optional<MainView> mv, Model model,Controller controller) {
-        this.mv = mv;
-        this.model = model;
+    public ChooseCourse(Controller controller) {
+        this.mv = controller.mv;
+        this.model = controller.model;
         this.controller = controller;
 
         this.selectedCourse = model.getSelectedCourse();
@@ -44,9 +44,7 @@ public class ChooseCourse implements ActionListener {
 
             if(selectedCourse !=null && selectedCourse.getName().equals(chosenCourse)){
                 controller.activate( new String[]{chosenCourse},new String[]{});
-                view.setCourse("");
-                updateSelectedCourse("", view);
-                displayFirstExercise(view);
+
                 return;
             }
 
@@ -78,9 +76,6 @@ public class ChooseCourse implements ActionListener {
             view.displayExercise(currentExercise, selectedCourse.getExcerciseIndex(currentExercise));
             view.getAnswerField().revalidate();
             view.getAnswerField().repaint();
-        }
-        else {
-            view.displayExercise(null, -1);
         }
     }
 }

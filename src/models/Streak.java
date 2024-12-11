@@ -30,8 +30,7 @@ public class Streak {
             streak=0; //reset
         }
         notifyObservers(Integer.toString(streak));
-        lastPracticeDate = LocalDate.now(); // Update last practice date
-        logger.logChange( " streak updated to: " + streak, "streak", toString());
+        lastPracticeDate = LocalDate.now();
     }
 
     @Override

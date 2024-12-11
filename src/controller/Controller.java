@@ -14,68 +14,6 @@ import java.util.*;
 ;
 public class Controller implements ControllerInterface{
 
-
-
-
-        public class passToPremium implements ActionListener {
-            private boolean isPremium = true;
-            public void actionPerformed(ActionEvent e) {
-                mv.ifPresent(mv -> {
-                    if (e.getSource() == mv.getPremiumButton()) {
-                        if (isPremium) {
-                            isPremium = false;
-                            activate(new String[]{"PREMIUM"}, new String[]{});
-
-                            model.getEnergySystem().addObserver(mv.getPremiumLabelObserver());
-
-                        } else {
-                            isPremium = true;
-                            activate(new String[]{}, new String[]{"PREMIUM"});
-                            model.getEnergySystem().removeObserver(mv.getPremiumLabelObserver());
-
-                        }
-
-                    }
-                });
-            }
-        }
-
-
-
-        public class changeQuestion implements ActionListener {
-            public void actionPerformed(ActionEvent e) {
-
-                mv.ifPresent(mv -> {
-                    if (!model.getAvailableCourses().contains(mv.getCourse())) {
-                        return;
-                    }
-                    int index = mv.getCurrentExerciseIndex();
-
-                    if (e.getSource() == mv.getPreviousQuestionButton()) {
-                        if (index > 0) {
-                            index--;
-
-                            Course course = model.getCourse(mv.getCourse());
-                            Exercise currentExercice = course.getExercises().get(index);
-                            mv.displayExercise(currentExercice,course.getExcerciseIndex(currentExercice));
-                            mv.displayHint("");
-                        }
-                    } else if (e.getSource() == mv.getNextQuestionButton()) {
-                        Course course = model.getCourse(mv.getCourse());
-
-                        if (course != null && index < course.getExercises().size() - 1) {
-                            index++;
-                            Exercise currentExercice =course.getExercises().get(index);
-                            mv.displayExercise(currentExercice,course.getExcerciseIndex(currentExercice));
-                            mv.displayHint("");
-                        }
-                    }
-                    ;
-
-                });
-            }
-        }
-
         Optional<MainView> mv = Optional.empty();
         Model model = new Model("OEM", 0);
 
@@ -101,11 +39,11 @@ public class Controller implements ControllerInterface{
         @Override
         public boolean enableUIView() {
             mv = Optional.of(new MainView());
-            mv.get().addCourseButtonListener(new ChooseCourse(mv,model,this));
-            mv.get().addTextfieldListener(new EnterAnswer(mv,model));
-            mv.get().addHintButtonListener( new GetHint(mv,model));
-            mv.get().addChangeQuestionButtonListener(new changeQuestion());
-            mv.get().addPremiumButtonListener(new passToPremium());
+            mv.get().addCourseButtonListener(new ChooseCourse(this));
+            mv.get().addTextfieldListener(new EnterAnswer(this));
+            mv.get().addHintButtonListener( new GetHint(this));
+            mv.get().addChangeQuestionButtonListener(new ChangeQuestion(this));
+            mv.get().addPremiumButtonListener(new PassToPremium(this));
             model.getStreak().addObserver(mv.get().getStreakLabelObserver());
             return true;
         }

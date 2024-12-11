@@ -7,10 +7,8 @@ import java.util.List;
 
 public interface Course {
     String getName();
-    int getCourseRank();
     List<Exercise> getExercises();
     String toString();
-    int getId();
     int getExcerciseIndex(Exercise exercise);
     boolean practice( Exercise exercise,String userAnswer);
     void addRankObserver(Observer observer) ;

@@ -14,9 +14,9 @@ public class GetHint implements ActionListener {
     private final Optional<MainView> mv;
     private final Model model;
 
-    public GetHint(Optional<MainView> mv, Model model) {
-        this.mv = mv;
-        this.model = model;
+    public GetHint(Controller controller) {
+        this.mv = controller.mv;
+        this.model = controller.model;
 
     }
 

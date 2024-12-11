@@ -17,9 +17,9 @@ public class EnterAnswer implements ActionListener {
     private final Model model;
 
 
-    public EnterAnswer(Optional<MainView> mv, Model model) {
-        this.mv = mv;
-        this.model = model;
+    public EnterAnswer(Controller controller) {
+        this.mv = controller.mv;
+        this.model = controller.model;
     }
 
     public void actionPerformed(ActionEvent e) {

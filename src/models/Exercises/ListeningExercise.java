@@ -9,7 +9,7 @@ public class ListeningExercise extends Exercise {
     }
 
     public String getAudioFilePath() {
-        return audioFilePath; //dont really know if this is this way
+        return audioFilePath;
     }
 
     @Override

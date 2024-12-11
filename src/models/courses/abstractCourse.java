@@ -11,13 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class abstractCourse implements Course{
-    private static int idCounter = 0;
 
 
     private final String name;
     private List<Exercise> exercises;
     private int courseRank;
-    private static int id;
     private final List<Observer> rankObservers = new ArrayList<>();
     private final List<Observer> scoreObservers = new ArrayList<>();
 
@@ -27,26 +25,13 @@ abstract class abstractCourse implements Course{
         this.name = name;
         this.courseRank = courseRank;
         this.exercises = exercises;
-        this.id=idCounter;
-        idCounter++;
 
-        logger.logChange(name + " course created and exercises have been loaded!",name+id,this.toString());
     }
 
 
     @Override
     public String getName() {
         return name;
-    }
-
-    @Override
-    public int getCourseRank() {
-        return courseRank;
-    }
-
-    @Override
-    public int getId() {
-        return id;
     }
 
 
@@ -57,7 +42,6 @@ abstract class abstractCourse implements Course{
            courseRank++;
            notifyScoreObservers(Integer.toString(courseRank));
            checkRankPromotion();
-           logger.logChange(name + " course score increased to " + courseRank,name+id,this.toString());
            return true;
        }
        return false;
@@ -68,9 +52,7 @@ abstract class abstractCourse implements Course{
             for (Rank rank : Rank.values()) {
                 if(courseRank <= rank.getUpperBound() && courseRank >= rank.getLowerBound()){
                     exercises = ExerciseData.getExerciseLookup().getOrDefault(name+rank.getName(),new ArrayList<>());
-                    System.out.println(exercises.getFirst());
                     notifyRankObservers(rank.getName(),exercises.getFirst());
-                    logger.logChange(name + " rank promotion! to " + rank.getName(),name+id,this.toString());
                 }
             }
         }
@@ -88,7 +70,7 @@ abstract class abstractCourse implements Course{
 
     @Override
     public String toString() {
-        return "abstractCourse{" + "id="+ id +
+        return "abstractCourse{" +
                 "name='" + name + '\'' +
                 ", exercises=" + exercises +
                 ", courseRank=" + courseRank +
@@ -108,7 +90,6 @@ abstract class abstractCourse implements Course{
         for (Observer observer : rankObservers) {
                 observer.update(message);
                 if( exercise != null) {
-                    System.out.println(exercise.getText());
                     observer.update(exercise ,0);
                 }
         }

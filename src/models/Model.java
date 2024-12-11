@@ -42,8 +42,6 @@ public class Model {
         activeFeatures.add(new EnglishCourseFeature(this));
         activeFeatures.add(new FrenchCourseFeature(this));
         activeFeatures.add(new SpanishCourseFeature(this));
-
-        logger.logChange("user: " + username + " has been created", username, this.toString());
     }
 
 
@@ -51,12 +49,9 @@ public class Model {
         if (energySystem.canPractice(isPremium)) {
             energySystem.useEnergy(isPremium);
             streak.updateStreak();
-            logger.logChange(username + " practiced! Current energy: " + energySystem.getCurrentEnergy(), username, this.toString());
             return true;
-        } else {
-            logger.logChange(username + " does not have enough energy to practice.", username, this.toString());
-            return false;
         }
+            return false;
     }
 
     private FeatureCommand getCommandByName( String name) {
