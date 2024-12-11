@@ -8,7 +8,6 @@ public class BottomPanel extends JPanel {
     private final JButton frenchButton;
     private final JButton englishButton;
     private final JButton premiumButton;
-    private final JButton activateCourseButton;
 
     public BottomPanel() {
         setLayout(new BorderLayout());
@@ -26,14 +25,9 @@ public class BottomPanel extends JPanel {
         // (Vertical)
         JPanel actionPanel = new JPanel(new GridLayout(2, 1, 5, 5));
         premiumButton = new JButton("Premium");
-        activateCourseButton = new JButton("Activate Course");
-
         actionPanel.add(premiumButton);
-        actionPanel.add(activateCourseButton);
-
         //padding
         actionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
         add(languagePanel, BorderLayout.CENTER);
         add(actionPanel, BorderLayout.EAST);
     }
@@ -55,8 +49,6 @@ public class BottomPanel extends JPanel {
         return premiumButton;
     }
 
-    public JButton getActivateCourseButton() {
-        return activateCourseButton;
-    }
+
 }
 

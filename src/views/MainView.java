@@ -62,10 +62,6 @@ public class MainView {
         middlePanel.getAnswerField().addActionListener(listener);
     }
 
-    public void addActivateCourseButtonListener(ActionListener listener) {
-        bottomPanel.getActivateCourseButton().addActionListener(listener);
-    }
-
     public void displayExercise(Exercise exercise, int index) {
         middlePanel.displayExercise(exercise, index);
     }
@@ -135,9 +131,7 @@ public class MainView {
     public JButton getFrenchButton(){
         return bottomPanel.getFrenchButton();
     }
-    public JButton getActivateCourseButton(){
-        return bottomPanel.getActivateCourseButton();
-    }
+
     public JButton getPreviousQuestionButton(){
         return middlePanel.getPreviousQuestionButton();
     }
