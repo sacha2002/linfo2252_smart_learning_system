@@ -95,6 +95,14 @@ public class MiddlePanel extends JPanel {
         hintIsActivated = !hintIsActivated;
     }
 
+    public void toggleHintButton(boolean active){
+       hintButton.setEnabled(active);
+        if(!active){
+            updateHint("");
+        }
+    }
+
+
     public void updateHint(String hint) {
         if (hint.equals(""))
             hintIsActivated = false;

@@ -66,6 +66,10 @@ public class MainView {
         middlePanel.displayExercise(exercise, index);
     }
 
+    public void toggleHintButton(boolean active){
+        middlePanel.toggleHintButton(active);
+
+    }
 
     public void displayHint(String hint) {
         setHintTrue();
