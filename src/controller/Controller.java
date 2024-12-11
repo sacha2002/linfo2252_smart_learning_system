@@ -42,24 +42,6 @@ public class Controller implements ControllerInterface{
 
 
 
-        public class activateCourse implements ActionListener {
-            private boolean isActivated = false;
-            public void actionPerformed(ActionEvent e) {
-                mv.ifPresent(mv -> {
-                    if (e.getSource() == mv.getActivateCourseButton()) {
-                        if (isActivated) {
-                            isActivated = false;
-                            activate(new String[]{"COURSES"}, new String[]{});
-
-                        } else {
-                            isActivated = true;
-                            activate(new String[]{}, new String[]{"COURSES"});
-                        }
-
-            }});
-            }
-            }
-
         public class changeQuestion implements ActionListener {
             public void actionPerformed(ActionEvent e) {
 
@@ -124,7 +106,6 @@ public class Controller implements ControllerInterface{
             mv.get().addHintButtonListener( new GetHint(mv,model));
             mv.get().addChangeQuestionButtonListener(new changeQuestion());
             mv.get().addPremiumButtonListener(new passToPremium());
-            mv.get().addActivateCourseButtonListener(new activateCourse());
             model.getStreak().addObserver(mv.get().getStreakLabelObserver());
             return true;
         }

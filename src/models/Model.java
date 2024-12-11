@@ -125,8 +125,8 @@ public class Model {
     public void setPremium(boolean premium) {
         energySystem.setPremium();
         this.isPremium=premium;
-        String premiumMessage = premium ? "is now premium" : "is no longer premium";
-        logger.logChange(username + " " + premiumMessage, username, this.toString());
+        String premiumMessage = premium ? "Premium mode text appears on upper corner left" : "Free mode text appears on upper corner left";
+        logger.logChange(premiumMessage, username, this.toString());
     }
 
     public Streak getStreak() {
