@@ -24,7 +24,7 @@ public class Logger { //SINGLETON
     public void logChange(String message, String modelName, String stateDescription) {
         history.push(message);
         updateCurrentState(modelName, stateDescription);
-        System.out.println(message);
+        System.out.println("LOGGER: " +message);
     }
 
     public List<String> getHistory() {

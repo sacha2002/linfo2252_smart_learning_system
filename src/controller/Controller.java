@@ -101,7 +101,7 @@ public class Controller implements ControllerInterface{
         @Override
         public boolean enableUIView() {
             mv = Optional.of(new MainView());
-            mv.get().addCourseButtonListener(new ChooseCourse(mv,model));
+            mv.get().addCourseButtonListener(new ChooseCourse(mv,model,this));
             mv.get().addTextfieldListener(new EnterAnswer(mv,model));
             mv.get().addHintButtonListener( new GetHint(mv,model));
             mv.get().addChangeQuestionButtonListener(new changeQuestion());
