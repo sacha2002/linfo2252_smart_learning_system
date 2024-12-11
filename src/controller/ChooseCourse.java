@@ -42,8 +42,15 @@ public class ChooseCourse implements ActionListener {
             JButton sourceButton = (JButton) e.getSource();
             String chosenCourse = courseMap.get(sourceButton);
 
-            if (chosenCourse != null) {
-                controller.activate(new String[]{selectedCourse.getName()}, new String[]{chosenCourse});
+            if(selectedCourse !=null && selectedCourse.getName().equals(chosenCourse)){
+                controller.activate( new String[]{chosenCourse},new String[]{});
+
+                return;
+            }
+
+            if (chosenCourse != null ) {
+                String[] deactivateCurrentCourse = selectedCourse != null ? new String[]{selectedCourse.getName()} : new String[]{};
+                controller.activate(deactivateCurrentCourse, new String[]{chosenCourse});
                 view.setCourse(chosenCourse);
                 updateSelectedCourse(chosenCourse, view);
                 displayFirstExercise(view);
