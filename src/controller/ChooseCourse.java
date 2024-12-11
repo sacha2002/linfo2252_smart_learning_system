@@ -44,7 +44,9 @@ public class ChooseCourse implements ActionListener {
 
             if(selectedCourse !=null && selectedCourse.getName().equals(chosenCourse)){
                 controller.activate( new String[]{chosenCourse},new String[]{});
-
+                view.setCourse("");
+                updateSelectedCourse("", view);
+                displayFirstExercise(view);
                 return;
             }
 
@@ -76,6 +78,9 @@ public class ChooseCourse implements ActionListener {
             view.displayExercise(currentExercise, selectedCourse.getExcerciseIndex(currentExercise));
             view.getAnswerField().revalidate();
             view.getAnswerField().repaint();
+        }
+        else {
+            view.displayExercise(null, -1);
         }
     }
 }

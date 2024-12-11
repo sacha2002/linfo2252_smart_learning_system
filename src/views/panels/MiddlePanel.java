@@ -64,14 +64,19 @@ public class MiddlePanel extends JPanel {
 
     public void displayExercise(Exercise exercise, int index) {
         clearLabels();
-        JLabel label = new JLabel(exercise.getText(), JLabel.CENTER);
-        label.setBounds(0, 150, 600, 30);
-        add(label);
-        exercises.add(label);
-        currentExerciseIndex = index;
+        updateHint("");
+        if (exercise != null){
+            JLabel label = new JLabel(exercise.getText(), JLabel.CENTER);
+            label.setBounds(0, 150, 600, 30);
+            add(label);
+            exercises.add(label);
+            currentExerciseIndex = index;
+            repaint();
+            revalidate();
+            answerField.requestFocusInWindow();
+        }
         repaint();
         revalidate();
-        answerField.requestFocusInWindow();
     }
 
 
