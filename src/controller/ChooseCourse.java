@@ -19,18 +19,20 @@ public class ChooseCourse implements ActionListener {
     private final Map<JButton, String> courseMap = new HashMap<>();
     private final Optional<MainView> mv;
     private final Model model;
+    private final Controller controller;
 
     private Course selectedCourse;
-    public ChooseCourse(Optional<MainView> mv, Model model) {
+
+    public ChooseCourse(Optional<MainView> mv, Model model,Controller controller) {
         this.mv = mv;
         this.model = model;
+        this.controller = controller;
 
         this.selectedCourse = model.getSelectedCourse();
-        // Initialize the button-to-course mapping
         mv.ifPresent(view -> {
-            courseMap.put(view.getSpanishButton(), "spanish");
-            courseMap.put(view.getFrenchButton(), "french");
-            courseMap.put(view.getEnglishButton(), "english");
+            courseMap.put(view.getSpanishButton(), "SPANISH");
+            courseMap.put(view.getFrenchButton(), "FRENCH");
+            courseMap.put(view.getEnglishButton(), "ENGLISH");
         });
     }
 
@@ -41,6 +43,7 @@ public class ChooseCourse implements ActionListener {
             String chosenCourse = courseMap.get(sourceButton);
 
             if (chosenCourse != null) {
+                controller.activate(new String[]{selectedCourse.getName()}, new String[]{chosenCourse});
                 view.setCourse(chosenCourse);
                 updateSelectedCourse(chosenCourse, view);
                 displayFirstExercise(view);

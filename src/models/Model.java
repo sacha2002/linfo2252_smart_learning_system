@@ -7,9 +7,7 @@ import models.courses.Course;
 import models.courses.English;
 import models.courses.French;
 import models.courses.Spanish;
-import models.features.CoursesCommand;
-import models.features.FeatureCommand;
-import models.features.PremiumCommand;
+import models.features.*;
 
 
 import java.util.*;
@@ -40,8 +38,10 @@ public class Model {
         coursesList.add(new French(650, ExerciseData.getFrenchSilverExercises()));
         coursesList.add(new English(998, ExerciseData.getEnglishSilverExercises()));
         //init features
-        activeFeatures.add(new CoursesCommand(this));
         activeFeatures.add(new PremiumCommand(this));
+        activeFeatures.add(new EnglishCourseFeature(this));
+        activeFeatures.add(new FrenchCourseFeature(this));
+        activeFeatures.add(new SpanishCourseFeature(this));
 
         logger.logChange("user: " + username + " has been created", username, this.toString());
     }
@@ -81,13 +81,13 @@ public class Model {
         }
     }
 
-    public void updateAvailableCourses( boolean activate) {
+    public void updateAvailableCourses( boolean activate,String courseName) {
             if (activate) {
-                availableCourses.add("english");
-                availableCourses.add("spanish");
-                availableCourses.add("french");
+                availableCourses.add(courseName);
+                logger.logChange("new questions for "+ courseName + " has appeared in the middle panel", courseName, courseName);
             } else {
-                availableCourses.clear();
+                availableCourses.remove(courseName);
+                logger.logChange("removed questions for "+ courseName + " from the middle panel", courseName, courseName);
             }
     }
 
