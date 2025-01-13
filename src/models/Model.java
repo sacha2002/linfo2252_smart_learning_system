@@ -91,11 +91,7 @@ public class Model {
     }
 
 
-
-    //if it cant practice, no course is given( as second measure)
     public Course getCourse(String courseName){
-        if(!energySystem.canPractice(isPremium) && availableCourses.contains(courseName))
-            return null;
 
         for (Course c : coursesList) {
             if(courseName != null && courseName.equals(c.getName())){
@@ -107,7 +103,7 @@ public class Model {
 
     //if he cant practice, the courses arent available( as second measure)
     public List<Course> getCoursesList() {
-        if(energySystem.canPractice(isPremium) && !availableCourses.isEmpty())
+        if( !availableCourses.isEmpty())
             return coursesList;
         return new ArrayList<>();
     }

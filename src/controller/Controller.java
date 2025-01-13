@@ -38,6 +38,11 @@ public class Controller implements ControllerInterface{
 
         @Override
         public boolean enableUIView() {
+            try {
+                UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             mv = Optional.of(new MainView());
             mv.get().addCourseButtonListener(new ChooseCourse(this));
             mv.get().addTextfieldListener(new EnterAnswer(this));

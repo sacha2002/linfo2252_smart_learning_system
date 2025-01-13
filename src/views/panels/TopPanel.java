@@ -21,32 +21,64 @@ public class TopPanel extends JPanel {
     private final ScoreLabelObserver scoreLabelObserver;
 
     public TopPanel(MainView mv) {
-            setLayout(new BorderLayout());
 
+        setBackground(new Color(57, 81, 120));
+        setLayout(new BorderLayout());
 
-            JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            premiumLabel = new JLabel("Premium Mode", SwingConstants.LEFT);
-            streakLabel = new JLabel("Streak: ",SwingConstants.LEFT);
-            leftPanel.add(premiumLabel);
-            leftPanel.add(streakLabel);
+        // Left Panel for Premium and Streak
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBackground(new Color(57, 81, 120));
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS)); // Vertical layout
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
 
-            JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            rankLabel = new JLabel("Rank : None");
-            scoreLabel = new JLabel("Rank score : 0");
-            rightPanel.add(rankLabel);
-            rightPanel.add(scoreLabel);
+        premiumLabel = new JLabel("Premium Mode", SwingConstants.LEFT);
+        streakLabel = new JLabel("Streak: ", SwingConstants.LEFT);
 
-            // Add panels to the main panel
-            add(leftPanel, BorderLayout.WEST);
-            add(rightPanel, BorderLayout.EAST);
+        // Align the labels to the left within the BoxLayout
+        premiumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        streakLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-            // Initialize observers
-            streakLabelObserver = new StreakLabelObserver(streakLabel,this);
-            rankLabelObserver = new RankLabelObserver(rankLabel, mv,this);
-            premiumLabelObserver = new PremiumLabelObserver(premiumLabel,this);
-            scoreLabelObserver = new ScoreLabelObserver(scoreLabel,this);
+        leftPanel.add(premiumLabel);
+        leftPanel.add(Box.createVerticalStrut(5)); // Add some vertical spacing
+        leftPanel.add(streakLabel);
 
+        // Right Panel for Rank and Score
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(new Color(57, 81, 120));
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS)); // Vertical layout
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+
+        rankLabel = new JLabel("Rank : None", SwingConstants.RIGHT);
+        scoreLabel = new JLabel("Rank score : 0", SwingConstants.RIGHT);
+
+        // Align the labels to the right within the BoxLayout
+        rankLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        scoreLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+        rightPanel.add(rankLabel);
+        rightPanel.add(Box.createVerticalStrut(5)); // Add some vertical spacing
+        rightPanel.add(scoreLabel);
+
+        // Set styles for all labels
+        JLabel[] labels = {premiumLabel, scoreLabel, rankLabel, streakLabel};
+        for (JLabel label : labels) {
+            label.setForeground(Color.WHITE); // Text color
+            label.setFont(new Font("Verdana", Font.BOLD, 12));
         }
+
+        // Add panels to the main panel
+        add(leftPanel, BorderLayout.WEST);
+        add(rightPanel, BorderLayout.EAST);
+
+        // Initialize observers
+        streakLabelObserver = new StreakLabelObserver(streakLabel, this);
+        rankLabelObserver = new RankLabelObserver(rankLabel, mv, this);
+        premiumLabelObserver = new PremiumLabelObserver(premiumLabel, this);
+        scoreLabelObserver = new ScoreLabelObserver(scoreLabel, this);
+    }
+
+
+
 
 
 

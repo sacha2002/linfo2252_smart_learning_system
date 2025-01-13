@@ -44,7 +44,6 @@ public class ChooseCourse implements ActionListener {
 
             if(selectedCourse !=null && selectedCourse.getName().equals(chosenCourse)){
                 controller.activate( new String[]{chosenCourse},new String[]{});
-
                 return;
             }
 

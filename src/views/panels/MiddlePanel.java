@@ -1,6 +1,7 @@
 package views.panels;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,12 @@ public class MiddlePanel extends JPanel {
         messageLabel = new JLabel("", JLabel.CENTER);
         messageLabel.setBounds(0, 200, 600, 30);
 
+        JButton[] buttons = {previousQuestionButton,nextQuestionButton,hintButton};
+        for(JButton button : buttons){
+            button.setBackground(new Color(235, 231, 127));
+            button.setFont(new Font("Verdana", Font.BOLD,12));
+        }
+
         add(answerField);
         add(previousQuestionButton);
         add(nextQuestionButton);
@@ -68,6 +75,7 @@ public class MiddlePanel extends JPanel {
         if (exercise != null){
             JLabel label = new JLabel(exercise.getText(), JLabel.CENTER);
             label.setBounds(0, 150, 600, 30);
+            label.setFont(new Font("Verdana", Font.BOLD,12));
             add(label);
             exercises.add(label);
             currentExerciseIndex = index;
