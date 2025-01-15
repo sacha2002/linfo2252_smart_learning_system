@@ -1,15 +1,10 @@
 package controller;
 
-import models.Exercises.Exercise;
 import models.Logger;
 import models.Model;
-import models.Exercises.Rank;
-import models.courses.Course;
 import views.MainView;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.*;
 ;
 public class Controller implements ControllerInterface{

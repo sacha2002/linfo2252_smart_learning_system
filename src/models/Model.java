@@ -119,7 +119,7 @@ public class Model {
     public void setPremium(boolean premium) {
         energySystem.setPremium();
         this.isPremium=premium;
-        String premiumMessage = premium ? "Premium mode text appears on upper corner left" : "Free mode text appears on upper corner left";
+        String premiumMessage = premium ? "Premium mode text appears on upper corner left, you now have unlimited energy" : "Free mode text appears on upper corner left, you now have limited energy";
         logger.logChange(premiumMessage, username, this.toString());
     }
 
