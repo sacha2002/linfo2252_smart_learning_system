@@ -68,6 +68,12 @@ public class MiddlePanel extends JPanel {
         return hintButton;
     }
 
+    public void removeExercise(){
+        clearLabels();
+        repaint();
+        revalidate();
+    }
+
 
     public void displayExercise(Exercise exercise, int index) {
         clearLabels();

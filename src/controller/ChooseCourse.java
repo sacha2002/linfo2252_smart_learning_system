@@ -43,11 +43,15 @@ public class ChooseCourse implements ActionListener {
             String chosenCourse = courseMap.get(sourceButton);
 
             if(selectedCourse !=null && selectedCourse.getName().equals(chosenCourse)){
+                System.out.println("desactivation " + selectedCourse);
                 controller.activate( new String[]{chosenCourse},new String[]{});
+                selectedCourse = null;
+                removeExercise(view);
                 return;
             }
 
             if (chosenCourse != null ) {
+                System.out.println("activation " + chosenCourse);
                 String[] deactivateCurrentCourse = selectedCourse != null ? new String[]{selectedCourse.getName()} : new String[]{};
                 controller.activate(deactivateCurrentCourse, new String[]{chosenCourse});
                 view.setCourse(chosenCourse);
@@ -76,6 +80,10 @@ public class ChooseCourse implements ActionListener {
             view.getAnswerField().revalidate();
             view.getAnswerField().repaint();
         }
+    }
+
+    private void removeExercise(MainView view){
+        view.removeExercise();
     }
 }
 
