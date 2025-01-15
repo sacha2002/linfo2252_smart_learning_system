@@ -14,7 +14,7 @@ public class EnergySystem{
     private static final int MAX_ENERGY = 30;
     private int currentEnergy = MAX_ENERGY;
     private LocalDateTime lastRechargeTime = LocalDateTime.now();
-    private static final Duration RECHARGE_INTERVAL = Duration.ofMinutes(1);
+    private static final Duration RECHARGE_INTERVAL = Duration.ofSeconds(15);
 
     private Timer energyTimer;
 
@@ -44,7 +44,7 @@ public class EnergySystem{
     public boolean canPractice(boolean isPremium) {
         if(isPremium)
             return true;
-        boolean canPractice = currentEnergy > 0;
+        boolean canPractice = currentEnergy -1 > 0;
         String message = canPractice? "" : "Wait for energy to recharge";
         notifyObservers("Free Mode: "+ message);
         return canPractice;
@@ -55,9 +55,9 @@ public class EnergySystem{
         if(currentEnergy>=MAX_ENERGY)
             return;
         LocalDateTime now = LocalDateTime.now();
-        long minutesElapsed = Duration.between(lastRechargeTime, now).toMinutes();
+        long secondElapsed = Duration.between(lastRechargeTime, now).toSeconds();
 
-        int energyToRecharge = (int) (minutesElapsed / RECHARGE_INTERVAL.toMinutes());
+        int energyToRecharge = (int) (secondElapsed / RECHARGE_INTERVAL.toSeconds());
         if(energyToRecharge>0){
             currentEnergy+=  Math.min(energyToRecharge, MAX_ENERGY);
             lastRechargeTime = now;
@@ -67,7 +67,7 @@ public class EnergySystem{
     }
 
     private void startEnergyTimer() {
-        energyTimer = new Timer(10000, e -> {
+        energyTimer = new Timer(5000, e -> {
             rechargeEnergy();
         });
         energyTimer.start();

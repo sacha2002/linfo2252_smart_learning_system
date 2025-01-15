@@ -159,9 +159,6 @@ public class Model {
         }
     }
 
-    public void toggleHint() {
-        setHint(!isPremium);
-    }
 
     @Override
     public String toString() {
