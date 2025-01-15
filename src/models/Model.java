@@ -25,6 +25,7 @@ public class Model {
 
     private final EnergySystem energySystem;
     private boolean isPremium;
+    private boolean hint;
 
     private final Set<FeatureCommand> activeFeatures = new HashSet<>();
 
@@ -32,6 +33,7 @@ public class Model {
         this.username = username;
         this.streak = new Streak(streak);
         this.isPremium=false;
+        this.hint = false;
         this.energySystem = new EnergySystem();
         //all rank in silver just for demo
         coursesList.add(new Spanish(650, ExerciseData.getSpanishSilverExercises()));
@@ -42,6 +44,7 @@ public class Model {
         activeFeatures.add(new EnglishCourseFeature(this));
         activeFeatures.add(new FrenchCourseFeature(this));
         activeFeatures.add(new SpanishCourseFeature(this));
+        activeFeatures.add(new HintFeature(this));
     }
 
 
@@ -120,6 +123,22 @@ public class Model {
         logger.logChange(premiumMessage, username, this.toString());
     }
 
+    public void setHint(boolean hint){
+        this.hint = hint;
+        if (hint) {
+            logger.logChange("Hint text has now appear on center", username, this.toString());
+
+        } else {
+            logger.logChange("Hint text has now desappear on center", username, this.toString());
+        }
+
+    }
+
+    public boolean getHint() {
+            return hint;
+    }
+
+
     public Streak getStreak() {
         return streak;
     }
@@ -138,6 +157,10 @@ public class Model {
         } else {
             return "Pay us for hint";
         }
+    }
+
+    public void toggleHint() {
+        setHint(!isPremium);
     }
 
     @Override

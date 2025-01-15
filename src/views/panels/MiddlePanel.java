@@ -75,6 +75,7 @@ public class MiddlePanel extends JPanel {
     }
 
 
+
     public void displayExercise(Exercise exercise, int index) {
         clearLabels();
         updateHint("");

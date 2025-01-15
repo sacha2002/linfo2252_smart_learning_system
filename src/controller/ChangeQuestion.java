@@ -13,10 +13,12 @@ public class ChangeQuestion implements ActionListener {
 
     private final Optional<MainView> mv;
     private final Model model;
+    private final Controller controller;
 
     public ChangeQuestion(Controller controller) {
         this.mv = controller.mv;
         this.model = controller.model;
+        this.controller = controller;
 
     }
 
@@ -35,6 +37,7 @@ public class ChangeQuestion implements ActionListener {
                     Course course = model.getCourse(mv.getCourse());
                     Exercise currentExercice = course.getExercises().get(index);
                     mv.displayExercise(currentExercice,course.getExcerciseIndex(currentExercice));
+                    controller.activate(new String[]{"HINT"}, new String[]{});
                     mv.displayHint("");
                 }
             } else if (e.getSource() == mv.getNextQuestionButton()) {
@@ -45,6 +48,8 @@ public class ChangeQuestion implements ActionListener {
                     Exercise currentExercice =course.getExercises().get(index);
                     mv.displayExercise(currentExercice,course.getExcerciseIndex(currentExercice));
                     mv.displayHint("");
+                    controller.activate(new String[]{"HINT"}, new String[]{});
+
                 }
             }
             ;

@@ -28,15 +28,15 @@ public class PassToPremium  implements ActionListener{
                     if (isPremium) {
                         isPremium = false;
                         controller.activate(new String[]{"PREMIUM"}, new String[]{});
-
+                        controller.activate(new String[]{"HINT"}, new String[]{});
+                        mv.toggleHintButton(false);
                         model.getEnergySystem().addObserver(mv.getPremiumLabelObserver());
-                        mv.toggleHintButton(isPremium);
 
                     } else {
                         isPremium = true;
                         controller.activate(new String[]{}, new String[]{"PREMIUM"});
                         model.getEnergySystem().removeObserver(mv.getPremiumLabelObserver());
-                        mv.toggleHintButton(isPremium);
+                        mv.toggleHintButton(true);
                     }
 
                 }
